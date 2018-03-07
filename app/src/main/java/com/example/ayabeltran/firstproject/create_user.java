@@ -8,6 +8,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class create_user extends AppCompatActivity {
 
     dbhelper mydb;
@@ -47,69 +54,111 @@ public class create_user extends AppCompatActivity {
                 });
     }
     public void AddUser(){
-        String Nemail = etemail.getText().toString(),
-                Nuname = etuname.getText().toString(),
-                Npword = etpword.getText().toString(),
-                Ncpword = etcpword.getText().toString(),
-                Nfname = etfname.getText().toString(),
-                Nlanme = etlname.getText().toString();
+
+        GitHubRepo newuser = new GitHubRepo(
+//        String Nemail = etemail.getText().toString(),
+//                Nuname = etuname.getText().toString(),
+//                Npword = etpword.getText().toString(),
+//                Ncpword = etcpword.getText().toString(),
+//                Nfname = etfname.getText().toString(),
+//                Nlanme = etlname.getText().toString()
+
+                etemail.getText().toString(),
+                etuname.getText().toString(),
+                etpword.getText().toString(),
+                etfname.getText().toString(),
+                etlname.getText().toString()
+        );
 
 
-        if(Nemail.isEmpty() || !Nemail.contains("@")) {
+        if(etemail.getText().toString().isEmpty() || !etemail.getText().toString().contains("@")) {
             Toast.makeText(this, "Please enter an Email address.", Toast.LENGTH_SHORT).show();
             etemail.requestFocus();
             etemail.setText("");
             return;
 
         }
-        if(Nuname.isEmpty()){
+        if(etuname.getText().toString().isEmpty()){
             Toast.makeText(this, "Please enter a username.", Toast.LENGTH_SHORT).show();
             etuname.requestFocus();
             etuname.setText("");
             return;
         }
-        if(Npword.isEmpty()){
+        if(etpword.getText().toString().isEmpty()){
             Toast.makeText(this, "Please enter a password.", Toast.LENGTH_SHORT).show();
             etpword.requestFocus();
             etpword.setText("");
             return;
         }
-        if(!Ncpword.equals(Npword)){
+        if(!etcpword.getText().toString().equals(etpword.getText().toString())){
             Toast.makeText(this, "Your passwords do not match", Toast.LENGTH_SHORT).show();
             etcpword.requestFocus();
             etcpword.setText("");
             return;
         }
-        if(Nfname.isEmpty()){
+        if(etfname.getText().toString().isEmpty()){
             Toast.makeText(this, "Please enter your 1st name.", Toast.LENGTH_SHORT).show();
             etfname.requestFocus();
             etfname.setText("");
             return;
         }
-        if(Nlanme.isEmpty()){
+        if(etlname.getText().toString().isEmpty()){
             Toast.makeText(this, "Please enter your surname.", Toast.LENGTH_SHORT).show();
             etlname.requestFocus();
             etlname.setText("");
             return;
         }
 
-        boolean isInserted = mydb.adduser(Nemail, Nuname, Npword, Nfname,Nlanme);
-
-        if (isInserted) {
-
-            Toast.makeText(create_user.this, "you are now registered.", Toast.LENGTH_LONG).show();
-
-            Intent toLogin = new Intent(create_user.this, UserLogin.class);
-            startActivity(toLogin);
+        ////////////////////////////////////////////////////////////////////////////////////////
+        else{
+            sendNetwordRequest(newuser);
+            finish();
         }
-        else {
-        Toast.makeText(create_user.this, "your email or username is already in use.", Toast.LENGTH_LONG).show();
-            etemail.setText("");
-            etuname.setText("");
-            etpword.setText("");
-            etcpword.setText("");
-            etfname.setText("");
-            etlname.setText("");
-        }
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+//        boolean isInserted = mydb.adduser(Nemail, Nuname, Npword, Nfname,Nlanme);
+//
+//        if (isInserted) {
+//
+//            Toast.makeText(create_user.this, "you are now registered.", Toast.LENGTH_LONG).show();
+//
+//            Intent toLogin = new Intent(create_user.this, UserLogin.class);
+//            startActivity(toLogin);
+//        }
+//        else {
+//        Toast.makeText(create_user.this, "your email or username is already in use.", Toast.LENGTH_LONG).show();
+//            etemail.setText("");
+//            etuname.setText("");
+//            etpword.setText("");
+//            etcpword.setText("");
+//            etfname.setText("");
+//            etlname.setText("");
+//        }
     }
+        ////////////////////////////////////////////////////////////////////////////////////////
+    private void sendNetwordRequest(GitHubRepo newuser) {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://10.20.110.30:3000")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = builder.client(httpClient.build()).build();
+
+        gitHubClient client = retrofit.create(gitHubClient.class);
+        Call<GitHubRepo> call = client.adduser(newuser);
+
+        call.enqueue(new Callback<GitHubRepo>() {
+            @Override
+            public void onResponse(Call<GitHubRepo> call, Response<GitHubRepo> response) {
+//                Toast.makeText(addUser.this,response.body().getId(),Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<GitHubRepo> call, Throwable t) {
+                Toast.makeText(create_user.this,"error",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+        ///////////////////////////////////////////////////////////////////////////////////////
 }
