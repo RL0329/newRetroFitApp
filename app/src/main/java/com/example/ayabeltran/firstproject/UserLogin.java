@@ -50,7 +50,7 @@ public class UserLogin extends AppCompatActivity {
                             Toast.makeText(UserLogin.this, "welcome "+loginame+"!", Toast.LENGTH_SHORT).show();
                         }
                             else {
-                                Toast.makeText(UserLogin.this, "your username and password do not match.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(UserLogin.this, "your username and password do not match!", Toast.LENGTH_LONG).show();
                                 etloginame.setText("");
                                 etloginpword.setText("");
                                 etloginame.requestFocus();
