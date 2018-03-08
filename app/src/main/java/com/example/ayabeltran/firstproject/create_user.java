@@ -140,7 +140,7 @@ public class create_user extends AppCompatActivity {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://10.20.110.30:3000")
+                .baseUrl("http://10.16.33.79:3000")
                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit = builder.client(httpClient.build()).build();
