@@ -1,12 +1,14 @@
 package com.example.ayabeltran.firstproject;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.*;
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -25,6 +27,10 @@ public class create_user extends AppCompatActivity {
              etcpword,
              etfname,
              etlname;
+    public static final String baseURL = "http://10.16.33.79:3000";
+
+    boolean eUser = false;
+//    GitHubRepo newuser;
 
 
     @Override
@@ -41,6 +47,8 @@ public class create_user extends AppCompatActivity {
         etlname = findViewById(R.id.etLname);
         btnreg2 = findViewById(R.id.btnReg2);
 
+
+
         Register();
     }
 
@@ -55,20 +63,20 @@ public class create_user extends AppCompatActivity {
     }
     public void AddUser(){
 
-        GitHubRepo newuser = new GitHubRepo(
-//        String Nemail = etemail.getText().toString(),
-//                Nuname = etuname.getText().toString(),
-//                Npword = etpword.getText().toString(),
-//                Ncpword = etcpword.getText().toString(),
-//                Nfname = etfname.getText().toString(),
-//                Nlanme = etlname.getText().toString()
-
-                etemail.getText().toString(),
-                etuname.getText().toString(),
-                etpword.getText().toString(),
-                etfname.getText().toString(),
-                etlname.getText().toString()
-        );
+//        GitHubRepo newuser = new GitHubRepo(
+////        String Nemail = etemail.getText().toString(),
+////                Nuname = etuname.getText().toString(),
+////                Npword = etpword.getText().toString(),
+////                Ncpword = etcpword.getText().toString(),
+////                Nfname = etfname.getText().toString(),
+////                Nlanme = etlname.getText().toString()
+//
+//                etemail.getText().toString(),
+//                etuname.getText().toString(),
+//                etpword.getText().toString(),
+//                etfname.getText().toString(),
+//                etlname.getText().toString()
+//        );
 
 
         if(etemail.getText().toString().isEmpty() || !etemail.getText().toString().contains("@")) {
@@ -109,11 +117,24 @@ public class create_user extends AppCompatActivity {
             return;
         }
 
-        ////////////////////////////////////////////////////////////////////////////////////////
-        else{
-            sendNetwordRequest(newuser);
-            finish();
-        }
+
+        existingUser();
+
+//        if(eUser = true){
+//            Toast.makeText(this, "username already exists", Toast.LENGTH_SHORT).show();
+//            etuname.requestFocus();
+//            etuname.setText("");
+//            return;
+//        }
+//
+//
+//        ////////////////////////////////////////////////////////////////////////////////////////
+//        else{
+//            addUserRequest(newuser);
+//            Toast.makeText(create_user.this,"registered",Toast.LENGTH_SHORT).show();
+//            finish();
+//
+//        }
         ////////////////////////////////////////////////////////////////////////////////////////
 
 //        boolean isInserted = mydb.adduser(Nemail, Nuname, Npword, Nfname,Nlanme);
@@ -136,17 +157,18 @@ public class create_user extends AppCompatActivity {
 //        }
     }
         ////////////////////////////////////////////////////////////////////////////////////////
-    private void sendNetwordRequest(GitHubRepo newuser) {
+    private void addUserRequest(GitHubRepo newuser) {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://10.16.33.79:3000")
+                .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit = builder.client(httpClient.build()).build();
 
         gitHubClient client = retrofit.create(gitHubClient.class);
         Call<GitHubRepo> call = client.adduser(newuser);
+
 
         call.enqueue(new Callback<GitHubRepo>() {
             @Override
@@ -160,5 +182,60 @@ public class create_user extends AppCompatActivity {
             }
         });
     }
+
+    private void existingUser() {
+
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl(baseURL)
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = builder.client(httpClient.build()).build();
+
+        gitHubClient client = retrofit.create(gitHubClient.class);
+        Call<java.util.List<GitHubRepo>> call = client.eUser(etuname.getText().toString());
+
+
+        call.enqueue(new Callback<List<GitHubRepo>>() {
+            @Override
+            public void onResponse(Call<List<GitHubRepo>> call, Response<List<GitHubRepo>> response) {
+
+            List<GitHubRepo> mUsername = response.body();
+                if(mUsername.isEmpty()){
+
+                    GitHubRepo newuser = new GitHubRepo(
+                            etemail.getText().toString(),
+                            etuname.getText().toString(),
+                            etpword.getText().toString(),
+                            etfname.getText().toString(),
+                            etlname.getText().toString()
+                    );
+
+                    addUserRequest(newuser);
+                    Toast.makeText(create_user.this,"registered",Toast.LENGTH_SHORT).show();
+                    finish();
+
+
+                }
+                else{
+                    Toast.makeText(create_user.this, "username already exists", Toast.LENGTH_SHORT).show();
+                    etuname.requestFocus();
+                    etuname.setText("");
+                    return;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<GitHubRepo>> call, Throwable t) {
+
+                Toast.makeText(create_user.this,"con error",Toast.LENGTH_SHORT).show();
+
+            }
+
+        });
+
+    }
+
         ///////////////////////////////////////////////////////////////////////////////////////
 }
