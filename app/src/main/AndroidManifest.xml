@@ -29,6 +29,11 @@
         <activity android:name=".UserLogin" />
         <activity android:name=".ListDisplay" />
         <activity android:name=".List" />
+
+        <!--<activity-->
+            <!--android:name="com.example.ayabeltran.firstproject/java.util.List">-->
+
+        <!--</activity>-->
         <activity android:name=".newImg" />
 
         <meta-data
