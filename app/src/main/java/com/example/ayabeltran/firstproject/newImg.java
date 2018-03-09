@@ -20,6 +20,14 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class newImg extends AppCompatActivity {
 
     dbhelper mydb;
@@ -130,7 +138,8 @@ public class newImg extends AppCompatActivity {
     public void AddImage(){
         final String name = etnewimgname.getText().toString();
         final String des = etdesc.getText().toString();
-        final byte [] data = getimagebyte(btnimg);
+       // final byte [] data = getimagebyte(btnimg);
+        final String data = getimagebyte(btnimg).toString();
 
         if (name.isEmpty()){
             Toast.makeText(newImg.this, "please enter an image name.", Toast.LENGTH_SHORT).show();
@@ -144,12 +153,59 @@ public class newImg extends AppCompatActivity {
             return;
         }
 
+        Toast.makeText(newImg.this, data, Toast.LENGTH_SHORT).show();
 
-        mydb.addimg(data, name, des);
-        Toast.makeText(newImg.this, "new photo added", Toast.LENGTH_SHORT).show();
+        ImgRepo newimgDetails = new ImgRepo(
 
+                name,
+                des,
+                data
+        );
+
+        addImgRequest(newimgDetails);
         finish();
+
+
+//        mydb.addimg(data, name, des);
+//        Toast.makeText(newImg.this, "new photo added", Toast.LENGTH_SHORT).show();
+//
+//        finish();
     }
+
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+    private void addImgRequest(ImgRepo value) {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl(create_user.baseURL)
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = builder.client(httpClient.build()).build();
+
+        gitHubClient client = retrofit.create(gitHubClient.class);
+        Call<ImgRepo> call = client.addimg(value);
+
+
+        call.enqueue(new Callback<ImgRepo>() {
+            @Override
+            public void onResponse(Call<ImgRepo> call, Response<ImgRepo> response) {
+                Toast.makeText(newImg.this,"img inserted",Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onFailure(Call<ImgRepo> call, Throwable t) {
+                Toast.makeText(newImg.this,"error in newimg class",Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
     public static byte[] getimagebyte (ImageView imageView){

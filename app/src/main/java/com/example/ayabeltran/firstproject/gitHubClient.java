@@ -34,6 +34,8 @@ public interface gitHubClient {
     Call<GitHubRepo>
     adduser(@Body GitHubRepo posts);
 
+    @POST("/comments")Call<ImgRepo> addimg(@Body ImgRepo value);
+
 
 
 }

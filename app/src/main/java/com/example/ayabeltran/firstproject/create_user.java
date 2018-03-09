@@ -27,7 +27,7 @@ public class create_user extends AppCompatActivity {
              etcpword,
              etfname,
              etlname;
-    public static final String baseURL = "http://10.16.33.79:3000";
+    public static final String baseURL = "http://10.20.110.30:3000";
 
     boolean eUser = false;
 //    GitHubRepo newuser;
@@ -173,7 +173,7 @@ public class create_user extends AppCompatActivity {
         call.enqueue(new Callback<GitHubRepo>() {
             @Override
             public void onResponse(Call<GitHubRepo> call, Response<GitHubRepo> response) {
-//                Toast.makeText(addUser.this,response.body().getId(),Toast.LENGTH_SHORT).show();
+               Toast.makeText(create_user.this,"user created with ID: " + response.body().getId(),Toast.LENGTH_SHORT).show();
             }
 
             @Override
