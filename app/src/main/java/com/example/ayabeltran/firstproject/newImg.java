@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.net.URL;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -40,6 +41,8 @@ public class newImg extends AppCompatActivity {
     private static int CAPTURE_IMAGE = 2 ;
     Uri selectedimage;
     Bitmap camImg;
+    Bitmap bitmap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +101,16 @@ public class newImg extends AppCompatActivity {
                 }
         );
     }
+
+
+    private String imageToString (Bitmap bitmap){
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte [] imgBytes = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(imgBytes,Base64.DEFAULT);
+    }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == SELECT_IMAGE){
@@ -116,8 +129,8 @@ public class newImg extends AppCompatActivity {
             selectedimage = data.getData();
             try {
                 InputStream inputStream = getContentResolver().openInputStream(selectedimage);
-                Bitmap yourselectedimage = BitmapFactory.decodeStream(inputStream);
-                btnimg.setImageBitmap(yourselectedimage);
+                bitmap = BitmapFactory.decodeStream(inputStream);
+                btnimg.setImageBitmap(bitmap);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -139,10 +152,6 @@ public class newImg extends AppCompatActivity {
     public void AddImage(){
         final String name = etnewimgname.getText().toString();
         final String des = etdesc.getText().toString();
-        final byte [] data = getimagebyte(btnimg);
-//        final String data = getimagebyte(btnimg).toString();
-
-        String encodedImage = Base64.encodeToString(data, Base64.DEFAULT);
 
         if (name.isEmpty()){
             Toast.makeText(newImg.this, "please enter an image name.", Toast.LENGTH_SHORT).show();
@@ -156,13 +165,13 @@ public class newImg extends AppCompatActivity {
             return;
         }
 
-        Toast.makeText(newImg.this, encodedImage, Toast.LENGTH_SHORT).show();
+        Toast.makeText(newImg.this, imageToString(bitmap), Toast.LENGTH_SHORT).show();
 
         ImgRepo newimgDetails = new ImgRepo(
 
                 name,
                 des,
-                encodedImage
+                imageToString(bitmap)
         );
 
         addImgRequest(newimgDetails);

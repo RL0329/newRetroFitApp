@@ -70,7 +70,9 @@ public class FragList extends Fragment {
         sqLiteDatabase = mydb.getReadableDatabase();
 
 //        refreshList();
-loadData();
+
+        loadData();
+
 //        EndlessScroll();
 
         mswipeRefreshLayout.setRefreshing(false);
@@ -79,8 +81,9 @@ loadData();
             @Override
             public void onRefresh() {
                 places.clear();
-loadData();
-//                refreshList();
+
+                loadData();
+//              refreshList();
 
                 if (mswipeRefreshLayout.isRefreshing())
 
@@ -183,7 +186,7 @@ private void displayimg(){
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://10.16.33.79:3000")
+                .baseUrl(create_user.baseURL)
                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit = builder.client(httpClient.build()).build();
@@ -205,7 +208,7 @@ private void displayimg(){
             @Override
             public void onFailure(Call<java.util.ArrayList<ImgRepo>> call, Throwable t) {
 
-                Toast.makeText(getActivity(),"error",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"error in fraglist",Toast.LENGTH_SHORT).show();
             }
         });
 

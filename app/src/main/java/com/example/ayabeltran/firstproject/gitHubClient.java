@@ -26,9 +26,12 @@ public interface gitHubClient {
     ////////////////////////////////method/////////column///////////value
     Call<java.util.List<GitHubRepo>> eUser(@Query("username") String name);
 
+
     @GET("/posts")
     Call<java.util.List<GitHubRepo>> logIn(@Query("username")String uname, @Query("password") String pword);
 
+    @GET("{comments}")
+    Call<java.util.ArrayList<ImgRepo>> displayimg(@Path("comments") String comments);
 
     @POST("posts")
     Call<GitHubRepo>
