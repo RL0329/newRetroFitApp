@@ -17,7 +17,14 @@ import android.widget.AbsListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.util.*;
+
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class FragList extends Fragment {
@@ -62,9 +69,9 @@ public class FragList extends Fragment {
         mydb = new dbhelper(getActivity());
         sqLiteDatabase = mydb.getReadableDatabase();
 
-        refreshList();
-
-        EndlessScroll();
+//        refreshList();
+loadData();
+//        EndlessScroll();
 
         mswipeRefreshLayout.setRefreshing(false);
 
@@ -72,8 +79,8 @@ public class FragList extends Fragment {
             @Override
             public void onRefresh() {
                 places.clear();
-
-                refreshList();
+loadData();
+//                refreshList();
 
                 if (mswipeRefreshLayout.isRefreshing())
 
@@ -131,12 +138,15 @@ public class FragList extends Fragment {
 
                 if (isScrolling && (lastVisItem+2) > listSize && (listSize < rowCount )) {
 
-                    fetchData();
+//                    fetchData();
                 }
             }
 
         });
     }
+private void displayimg(){
+
+}
 
     public Cursor pulledItems(SQLiteDatabase db) {
         String pull = "select * from imgTable order by " + dbhelper.imgID + " desc limit 5 offset " + (totalItems);
@@ -145,87 +155,118 @@ public class FragList extends Fragment {
         return cursor;
     }
 
-    private ArrayList<Place> convertCursorToListPlace(Cursor cursor) {
-        ArrayList<Place> places = new ArrayList<>();
+//    private ArrayList<ImgRepo> convertCursorToListPlace(Cursor cursor) {
+//        ArrayList<ImgRepo> places = new ArrayList<>();
 
-        if (cursor.moveToFirst()) {
-            do {
-                int id;
-                String name, des;
-                byte[] photo;
+//        if (cursor.moveToFirst()) {
+//            do {
+//                int id;
+//                String name, des;
+//                byte[] photo;
+//
+//                id = cursor.getInt(cursor.getColumnIndex("id"));
+//                photo = cursor.getBlob(cursor.getColumnIndex("photo"));
+//                name = cursor.getString(cursor.getColumnIndex("name"));
+//                des = cursor.getString(cursor.getColumnIndex("des"));
+//
+//                ImgRepo place = new Place(id, photo, name, des);
+//                places.add(place);
+//            }
+//            while (cursor.moveToNext());
+//
+//        }
+//
+//        return places;
+    //}
+    private void loadData(){
 
-                id = cursor.getInt(cursor.getColumnIndex("id"));
-                photo = cursor.getBlob(cursor.getColumnIndex("photo"));
-                name = cursor.getString(cursor.getColumnIndex("name"));
-                des = cursor.getString(cursor.getColumnIndex("des"));
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
-                Place place = new Place(id, photo, name, des);
-                places.add(place);
-            }
-            while (cursor.moveToNext());
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://10.16.33.79:3000")
+                .addConverterFactory(GsonConverterFactory.create());
 
-        }
+        Retrofit retrofit = builder.client(httpClient.build()).build();
 
-        return places;
-    }
+        gitHubClient client =  retrofit.create(gitHubClient.class);
+        Call<java.util.ArrayList<ImgRepo>> call = client.displayimg("comments");
 
-    private void refreshList() {
-        Cursor cursor = getItemsFromDB();
-        populateList(cursor);
+        call.enqueue(new Callback<java.util.ArrayList<ImgRepo>>() {
+            @Override
+            public void onResponse(Call<java.util.ArrayList<ImgRepo>> call, Response<java.util.ArrayList<ImgRepo>> response) {
 
-    }
+                java.util.ArrayList<ImgRepo> repos = response.body();
+                recyclerAdapter = new RecyclerAdapter(repos, getContext());
+                recyclerView.setAdapter(recyclerAdapter);
 
-    private Cursor getItemsFromDB() {
-        return mydb.itemslisted(sqLiteDatabase);
-    }
-
-    private void populateList(Cursor cursor) {
-//        places = convertCursorToListPlace(cursor);
-
-        recyclerAdapter = new RecyclerAdapter(places, getContext());
-
-        recyclerView.setAdapter(recyclerAdapter);
-    }
-
-    private void fetchData() {
-
-        if (pulled.moveToFirst()) {
-            do {
-                int id;
-                String name, des;
-                byte[] photo;
-
-                id = pulled.getInt(pulled.getColumnIndex("id"));
-                photo = pulled.getBlob(pulled.getColumnIndex("photo"));
-                name = pulled.getString(pulled.getColumnIndex("name"));
-                des = pulled.getString(pulled.getColumnIndex("des"));
-
-//                ImgRepo places = new ImgRepo(id, photo, name, des);
-//                recyclerAdapter.getPlaces().add(places);
 
             }
-            while (pulled.moveToNext());
-
-
-            String count = String.valueOf(totalItems);
-            Toast.makeText(getActivity(), count, Toast.LENGTH_SHORT).show();
-        }
-
-        progressBar.setVisibility(View.VISIBLE);
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
 
             @Override
-            public void run() {
-                for (int i = 0; i < 3; i++) {
+            public void onFailure(Call<java.util.ArrayList<ImgRepo>> call, Throwable t) {
 
-                    recyclerAdapter.notifyDataSetChanged();
-                    progressBar.setVisibility(View.GONE);
-
-                }
-
+                Toast.makeText(getActivity(),"error",Toast.LENGTH_SHORT).show();
             }
-        }, 3000);
+        });
+
+    }
+//    private void refreshList() {
+//        Cursor cursor = getItemsFromDB();
+//        populateList(cursor);
+//
+//    }
+
+//    private Cursor getItemsFromDB() {
+//        return mydb.itemslisted(sqLiteDatabase);
+//    }
+
+//    private void populateList(Cursor cursor) {
+//        places = convertCursorToListPlace(cursor);
+//
+//        recyclerAdapter = new RecyclerAdapter(places, getContext());
+//
+//        recyclerView.setAdapter(recyclerAdapter);
+//    }
+
+//    private void fetchData() {
+//
+//        if (pulled.moveToFirst()) {
+//            do {
+//                int id;
+//                String name, des;
+//                byte[] photo;
+//
+//                id = pulled.getInt(pulled.getColumnIndex("id"));
+//                photo = pulled.getBlob(pulled.getColumnIndex("photo"));
+//                name = pulled.getString(pulled.getColumnIndex("name"));
+//                des = pulled.getString(pulled.getColumnIndex("des"));
+//
+//                ImgRepo places = new ImgRepo(id, photo, name, des);
+//                recyclerAdapter.getPlaces().add(places);
+//
+//            }
+//            while (pulled.moveToNext());
+//
+//
+//            String count = String.valueOf(totalItems);
+//            Toast.makeText(getActivity(), count, Toast.LENGTH_SHORT).show();
+//        }
+//
+//        progressBar.setVisibility(View.VISIBLE);
+//        Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                for (int i = 0; i < 3; i++) {
+//
+//                    recyclerAdapter.notifyDataSetChanged();
+//                    progressBar.setVisibility(View.GONE);
+//
+//                }
+//
+//            }
+//        }, 3000);
     }
 
-}
+//}
