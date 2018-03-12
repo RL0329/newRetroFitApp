@@ -28,7 +28,7 @@ public class FragList extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     SwipeRefreshLayout mswipeRefreshLayout;
 
-    ArrayList<Place> places = new ArrayList();
+    ArrayList<ImgRepo> places = new ArrayList();
     dbhelper mydb;
     SQLiteDatabase sqLiteDatabase;
     Cursor pulled;
@@ -180,7 +180,7 @@ public class FragList extends Fragment {
     }
 
     private void populateList(Cursor cursor) {
-        places = convertCursorToListPlace(cursor);
+//        places = convertCursorToListPlace(cursor);
 
         recyclerAdapter = new RecyclerAdapter(places, getContext());
 
@@ -200,8 +200,9 @@ public class FragList extends Fragment {
                 name = pulled.getString(pulled.getColumnIndex("name"));
                 des = pulled.getString(pulled.getColumnIndex("des"));
 
-                Place places = new Place(id, photo, name, des);
-                recyclerAdapter.getPlaces().add(places);
+//                ImgRepo places = new ImgRepo(id, photo, name, des);
+//                recyclerAdapter.getPlaces().add(places);
+
             }
             while (pulled.moveToNext());
 
