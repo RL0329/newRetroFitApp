@@ -13,6 +13,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -138,8 +139,10 @@ public class newImg extends AppCompatActivity {
     public void AddImage(){
         final String name = etnewimgname.getText().toString();
         final String des = etdesc.getText().toString();
-       // final byte [] data = getimagebyte(btnimg);
-        final String data = getimagebyte(btnimg).toString();
+        final byte [] data = getimagebyte(btnimg);
+//        final String data = getimagebyte(btnimg).toString();
+
+        String encodedImage = Base64.encodeToString(data, Base64.DEFAULT);
 
         if (name.isEmpty()){
             Toast.makeText(newImg.this, "please enter an image name.", Toast.LENGTH_SHORT).show();
@@ -153,13 +156,13 @@ public class newImg extends AppCompatActivity {
             return;
         }
 
-        Toast.makeText(newImg.this, data, Toast.LENGTH_SHORT).show();
+        Toast.makeText(newImg.this, encodedImage, Toast.LENGTH_SHORT).show();
 
         ImgRepo newimgDetails = new ImgRepo(
 
                 name,
                 des,
-                data
+                encodedImage
         );
 
         addImgRequest(newimgDetails);
