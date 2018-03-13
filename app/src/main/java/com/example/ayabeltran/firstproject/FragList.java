@@ -38,13 +38,14 @@ public class FragList extends Fragment {
     ArrayList<ImgRepo> places = new ArrayList();
     dbhelper mydb;
     SQLiteDatabase sqLiteDatabase;
-    Cursor pulled;
+    //    Cursor pulled;
     ProgressBar progressBar,
-                progressBar2;
+            progressBar2;
     RecyclerAdapter recyclerAdapter;
 
     Boolean isScrolling = false;
-    int totalItems;
+    public static int totalItems;
+    int rowCount;
 
     public FragList() {
         // Required empty public constructor
@@ -72,8 +73,7 @@ public class FragList extends Fragment {
 //        refreshList();
 
 
-
-//        EndlessScroll();
+        EndlessScroll();
 
         loadData();
 
@@ -117,7 +117,7 @@ public class FragList extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private void   loadData(){
+    private void loadData() {
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -127,7 +127,7 @@ public class FragList extends Fragment {
 
         Retrofit retrofit = builder.client(httpClient.build()).build();
 
-        gitHubClient client =  retrofit.create(gitHubClient.class);
+        gitHubClient client = retrofit.create(gitHubClient.class);
         Call<java.util.ArrayList<ImgRepo>> call = client.displayimg("comments");
 
         call.enqueue(new Callback<java.util.ArrayList<ImgRepo>>() {
@@ -137,14 +137,14 @@ public class FragList extends Fragment {
                 java.util.ArrayList<ImgRepo> repos = response.body();
                 recyclerAdapter = new RecyclerAdapter(repos, getContext());
                 recyclerView.setAdapter(recyclerAdapter);
-
+                rowCount = repos.size();
 
             }
 
             @Override
             public void onFailure(Call<java.util.ArrayList<ImgRepo>> call, Throwable t) {
 
-                Toast.makeText(getActivity(),"error in fraglist",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "error in fraglist", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -165,18 +165,18 @@ public class FragList extends Fragment {
                 super.onScrolled(recyclerView, dx, dy);
                 totalItems = mLayoutManager.getItemCount();
 //                pulled = pulledItems(sqLiteDatabase);
-                int rowCount = mydb.getimgTableCount();
+
                 int listSize = places.size();
                 int itemsOnScreen = mLayoutManager.getChildCount();
                 int lastVisItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
-                System.out.println("list size: "+listSize);
-                System.out.println("last visible item: "+lastVisItem);
-                System.out.println("items on screen: "+itemsOnScreen);
+                System.out.println("list size: " + listSize);
+                System.out.println("last visible item: " + lastVisItem);
+                System.out.println("items on screen: " + itemsOnScreen);
 
-                if (isScrolling && (lastVisItem+2) > listSize && (listSize < rowCount )) {
+                if (isScrolling && (lastVisItem + 2) > listSize && (listSize < rowCount)) {
 
-//                    fetchData();
+                    fetchData();
                 }
             }
 
@@ -235,8 +235,37 @@ public class FragList extends Fragment {
 //        recyclerView.setAdapter(recyclerAdapter);
 //    }
 
-//    private void fetchData() {
-//
+    private void fetchData() {
+
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl(create_user.baseURL)
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = builder.client(httpClient.build()).build();
+
+        gitHubClient client = retrofit.create(gitHubClient.class);
+        Call<java.util.ArrayList<ImgRepo>>call = client.fetchNewData("comments");
+        call.enqueue(new Callback<java.util.ArrayList<ImgRepo>> () {
+            @Override
+            public void onResponse (Call<java.util.ArrayList<ImgRepo>>
+            call, Response<java.util.ArrayList<ImgRepo>>response){
+
+                java.util.ArrayList<ImgRepo> newdata = response.body();
+//                recyclerAdapter = new RecyclerAdapter(newdata, getContext());
+//                recyclerView.setAdapter(recyclerAdapter);
+                recyclerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure (Call<java.util.ArrayList<ImgRepo>>call, Throwable t){
+
+                Toast.makeText(getActivity(), "error in fraglist", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
 //        if (pulled.moveToFirst()) {
 //            do {
 //                int id;
@@ -258,22 +287,25 @@ public class FragList extends Fragment {
 //            String count = String.valueOf(totalItems);
 //            Toast.makeText(getActivity(), count, Toast.LENGTH_SHORT).show();
 //        }
-//
-//        progressBar.setVisibility(View.VISIBLE);
-//        Handler handler = new Handler();
-//        handler.postDelayed(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                for (int i = 0; i < 3; i++) {
-//
-//                    recyclerAdapter.notifyDataSetChanged();
-//                    progressBar.setVisibility(View.GONE);
-//
-//                }
-//
-//            }
-//        }, 3000);
-    }
 
-//}
+        progressBar.setVisibility(View.VISIBLE);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                for (int i = 0; i < 3; i++) {
+
+                    recyclerAdapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
+
+                }
+
+            }
+        }, 3000);
+
+    }
+}
+
+
+
