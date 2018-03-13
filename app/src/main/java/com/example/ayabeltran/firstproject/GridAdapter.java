@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.*;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import java.util.*;
+import java.util.Base64;
 
 /**
  * Created by ayabeltran on 01/02/2018.
@@ -21,14 +23,14 @@ import java.util.*;
 
 public class GridAdapter extends RecyclerView.Adapter <GridAdapter.MyViewHolder> {
 
-    private ArrayList<Place> places = new ArrayList<>();
+    private ArrayList<ImgRepo> places = new ArrayList<>();
     private Context context;
 
-    public GridAdapter(ArrayList<Place> places, Context context) {
+    public GridAdapter(ArrayList<ImgRepo> places, Context context) {
         this.places = places;
         this.context = context;
     }
-    public ArrayList<Place> getPlaces() {
+    public ArrayList<ImgRepo> getPlaces() {
         return this.places;
     }
 
@@ -46,7 +48,7 @@ public class GridAdapter extends RecyclerView.Adapter <GridAdapter.MyViewHolder>
         TextView name;
         TextView des;
         ImageView photo;
-        Place selectedPlace;
+        ImgRepo selectedPlace;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -58,9 +60,9 @@ public class GridAdapter extends RecyclerView.Adapter <GridAdapter.MyViewHolder>
                 @Override
                 public void onClick(View v) {
                     Intent preview = new Intent(context, ListDisplay.class);
-                    preview.putExtra("Key", selectedPlace.getName());
-                    preview.putExtra("Key2", selectedPlace.getDes());
-                    preview.putExtra("Key3", selectedPlace.getPhoto());
+                    preview.putExtra("Key", selectedPlace.getImgname());
+                    preview.putExtra("Key2", selectedPlace.getDesc());
+                    preview.putExtra("Key3", selectedPlace.getImgstring());
                     context.startActivity(preview);
                 }
             });
@@ -71,16 +73,20 @@ public class GridAdapter extends RecyclerView.Adapter <GridAdapter.MyViewHolder>
     public void onBindViewHolder(GridAdapter.MyViewHolder holder, int position) {
 
         //        getting the original photo from the list
-        byte[] originalPhoto = places.get(position).getPhoto();
+        String originalPhoto = places.get(position).getImgstring();
 
 //        converting the photo bytes to usable image
-        Bitmap decodedPhoto = BitmapFactory.decodeByteArray(originalPhoto, 0, originalPhoto.length);
+//        Bitmap decodedPhoto = BitmapFactory.decodeByteArray(originalPhoto, 0, originalPhoto.length);
 
-        holder.photo.setImageBitmap(decodedPhoto);
-        holder.name.setText(places.get(position).getName());
-//        holder.des.setText(places.get(position).getDes());
+        final String pureBase64Encoded = originalPhoto.substring(originalPhoto.indexOf(",")  + 1);
+        final byte[] decodedBytes = android.util.Base64.decode(pureBase64Encoded, android.util.Base64.DEFAULT);
+
+
+//        holder.photo.setImageBitmap(decodedBytes);
+        holder.name.setText(places.get(position).getImgname());
+//        holder.des.setText(places.get(position).getDesc());
         holder.selectedPlace = places.get(position);
-        Glide.with(context).load(places.get(position).getPhoto()).into(holder.photo);
+        Glide.with(context).load(decodedBytes).into(holder.photo);
 //        Toast.makeText(context, places.get(position).getPhoto().toString(), Toast.LENGTH_SHORT).show();
     }
 

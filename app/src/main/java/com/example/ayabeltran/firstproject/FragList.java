@@ -66,14 +66,16 @@ public class FragList extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        mydb = new dbhelper(getActivity());
-        sqLiteDatabase = mydb.getReadableDatabase();
+//        mydb = new dbhelper(getActivity());
+//        sqLiteDatabase = mydb.getReadableDatabase();
 
 //        refreshList();
 
-        loadData();
+
 
 //        EndlessScroll();
+
+        loadData();
 
         mswipeRefreshLayout.setRefreshing(false);
 
@@ -115,73 +117,7 @@ public class FragList extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private void EndlessScroll() {
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    isScrolling = true;
-                }
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                totalItems = mLayoutManager.getItemCount();
-                pulled = pulledItems(sqLiteDatabase);
-                int rowCount = mydb.getimgTableCount();
-                int listSize = places.size();
-                int itemsOnScreen = mLayoutManager.getChildCount();
-                int lastVisItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-
-                System.out.println("list size: "+listSize);
-                System.out.println("last visible item: "+lastVisItem);
-                System.out.println("items on screen: "+itemsOnScreen);
-
-                if (isScrolling && (lastVisItem+2) > listSize && (listSize < rowCount )) {
-
-//                    fetchData();
-                }
-            }
-
-        });
-    }
-private void displayimg(){
-
-}
-
-    public Cursor pulledItems(SQLiteDatabase db) {
-        String pull = "select * from imgTable order by " + dbhelper.imgID + " desc limit 5 offset " + (totalItems);
-        Log.d("pull", pull);
-        Cursor cursor = db.rawQuery(pull, null);
-        return cursor;
-    }
-
-//    private ArrayList<ImgRepo> convertCursorToListPlace(Cursor cursor) {
-//        ArrayList<ImgRepo> places = new ArrayList<>();
-
-//        if (cursor.moveToFirst()) {
-//            do {
-//                int id;
-//                String name, des;
-//                byte[] photo;
-//
-//                id = cursor.getInt(cursor.getColumnIndex("id"));
-//                photo = cursor.getBlob(cursor.getColumnIndex("photo"));
-//                name = cursor.getString(cursor.getColumnIndex("name"));
-//                des = cursor.getString(cursor.getColumnIndex("des"));
-//
-//                ImgRepo place = new Place(id, photo, name, des);
-//                places.add(place);
-//            }
-//            while (cursor.moveToNext());
-//
-//        }
-//
-//        return places;
-    //}
-    private void loadData(){
+    private void   loadData(){
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -213,6 +149,74 @@ private void displayimg(){
         });
 
     }
+
+//    private void EndlessScroll() {
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+//                    isScrolling = true;
+//                }
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                totalItems = mLayoutManager.getItemCount();
+//                pulled = pulledItems(sqLiteDatabase);
+//                int rowCount = mydb.getimgTableCount();
+//                int listSize = places.size();
+//                int itemsOnScreen = mLayoutManager.getChildCount();
+//                int lastVisItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+//
+//                System.out.println("list size: "+listSize);
+//                System.out.println("last visible item: "+lastVisItem);
+//                System.out.println("items on screen: "+itemsOnScreen);
+//
+//                if (isScrolling && (lastVisItem+2) > listSize && (listSize < rowCount )) {
+//
+////                    fetchData();
+//                }
+//            }
+//
+//        });
+//    }
+//private void displayimg(){
+//
+//}
+//
+//    public Cursor pulledItems(SQLiteDatabase db) {
+//        String pull = "select * from imgTable order by " + dbhelper.imgID + " desc limit 5 offset " + (totalItems);
+//        Log.d("pull", pull);
+//        Cursor cursor = db.rawQuery(pull, null);
+//        return cursor;
+//    }
+
+//    private ArrayList<ImgRepo> convertCursorToListPlace(Cursor cursor) {
+//        ArrayList<ImgRepo> places = new ArrayList<>();
+
+//        if (cursor.moveToFirst()) {
+//            do {
+//                int id;
+//                String name, des;
+//                byte[] photo;
+//
+//                id = cursor.getInt(cursor.getColumnIndex("id"));
+//                photo = cursor.getBlob(cursor.getColumnIndex("photo"));
+//                name = cursor.getString(cursor.getColumnIndex("name"));
+//                des = cursor.getString(cursor.getColumnIndex("des"));
+//
+//                ImgRepo place = new Place(id, photo, name, des);
+//                places.add(place);
+//            }
+//            while (cursor.moveToNext());
+//
+//        }
+//
+//        return places;
+    //}
+
 //    private void refreshList() {
 //        Cursor cursor = getItemsFromDB();
 //        populateList(cursor);
