@@ -150,38 +150,38 @@ public class FragList extends Fragment {
 
     }
 
-//    private void EndlessScroll() {
-//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-//                    isScrolling = true;
-//                }
-//            }
-//
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                totalItems = mLayoutManager.getItemCount();
+    private void EndlessScroll() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                totalItems = mLayoutManager.getItemCount();
 //                pulled = pulledItems(sqLiteDatabase);
-//                int rowCount = mydb.getimgTableCount();
-//                int listSize = places.size();
-//                int itemsOnScreen = mLayoutManager.getChildCount();
-//                int lastVisItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-//
-//                System.out.println("list size: "+listSize);
-//                System.out.println("last visible item: "+lastVisItem);
-//                System.out.println("items on screen: "+itemsOnScreen);
-//
-//                if (isScrolling && (lastVisItem+2) > listSize && (listSize < rowCount )) {
-//
-////                    fetchData();
-//                }
-//            }
-//
-//        });
-//    }
+                int rowCount = mydb.getimgTableCount();
+                int listSize = places.size();
+                int itemsOnScreen = mLayoutManager.getChildCount();
+                int lastVisItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+
+                System.out.println("list size: "+listSize);
+                System.out.println("last visible item: "+lastVisItem);
+                System.out.println("items on screen: "+itemsOnScreen);
+
+                if (isScrolling && (lastVisItem+2) > listSize && (listSize < rowCount )) {
+
+//                    fetchData();
+                }
+            }
+
+        });
+    }
 //private void displayimg(){
 //
 //}
