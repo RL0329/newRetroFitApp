@@ -26,6 +26,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.ayabeltran.firstproject.EndlessScrollListener.currentPage;
+import static com.example.ayabeltran.firstproject.EndlessScrollListener.loading;
+import static com.example.ayabeltran.firstproject.EndlessScrollListener.previousTotalItemCount;
+import static com.example.ayabeltran.firstproject.EndlessScrollListener.visibleThreshold;
+
 
 public class FragList extends Fragment {
 
@@ -50,7 +55,7 @@ public class FragList extends Fragment {
     public FragList() {
         // Required empty public constructor
     }
-
+    private EndlessScrollListener scrollListener;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -72,10 +77,13 @@ public class FragList extends Fragment {
 
 //        refreshList();
 
-
         EndlessScroll();
 
         loadData();
+
+        // Adds the scroll listener to RecyclerView
+        recyclerView.addOnScrollListener(scrollListener);
+
 
         mswipeRefreshLayout.setRefreshing(false);
 
@@ -112,7 +120,7 @@ public class FragList extends Fragment {
         return v;
     }
 
-    public interface OnFragmentInteractionListener {
+        public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
@@ -155,33 +163,37 @@ public class FragList extends Fragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                if (newState == EndlessScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     isScrolling = true;
+                    loadData();
                 }
+
             }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                totalItems = mLayoutManager.getItemCount();
-//                pulled = pulledItems(sqLiteDatabase);
-
-                int listSize = places.size();
-                int itemsOnScreen = mLayoutManager.getChildCount();
-                int lastVisItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-
-                System.out.println("list size: " + listSize);
-                System.out.println("last visible item: " + lastVisItem);
-                System.out.println("items on screen: " + itemsOnScreen);
-
-                if (isScrolling && (lastVisItem + 2) > listSize && (listSize < rowCount)) {
-
-                    fetchData();
-                }
+//                totalItems = mLayoutManager.getItemCount();
+////                pulled = pulledItems(sqLiteDatabase);
+//
+//                int listSize = places.size();
+//                int itemsOnScreen = mLayoutManager.getChildCount();
+//                int lastVisItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+//
+//                System.out.println("list size: " + listSize);
+//                System.out.println("last visible item: " + lastVisItem);
+//                System.out.println("items on screen: " + itemsOnScreen);
+//
+//                if (isScrolling && (lastVisItem + 2) > listSize && (listSize < rowCount)) {
+//
+//
+//                    fetchData();
+//                }
             }
 
         });
     }
+
 //private void displayimg(){
 //
 //}
