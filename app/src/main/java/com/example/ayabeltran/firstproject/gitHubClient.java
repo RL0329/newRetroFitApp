@@ -23,14 +23,14 @@ public interface gitHubClient {
     );
 
     @GET("/posts")
-    ////////////////////////////////method/////////column///////////value
+        ////////////////////////////////method/////////column///////////value
     Call<java.util.List<GitHubRepo>> eUser(@Query("username") String name);
 
 
     @GET("/posts")
     Call<java.util.List<GitHubRepo>> logIn(@Query("username")String uname, @Query("password") String pword);
 
-    @GET("{comments}")
+    @GET("{comments}?_sort=id&_order=desc&_page=1&_limit=5")
     Call<java.util.ArrayList<ImgRepo>> displayimg(@Path("comments") String comments);
 
 
@@ -38,7 +38,13 @@ public interface gitHubClient {
     Call<GitHubRepo>
     adduser(@Body GitHubRepo posts);
 
+    @GET("{comments}?_sort=id&_order=desc")
+    Call<java.util.ArrayList<ImgRepo>>fetchNewData (@Path("comments") String comments);
+
     @POST("/comments")Call<ImgRepo> addimg(@Body ImgRepo value);
+
+    @GET("{comments}")
+    Call<java.util.ArrayList<ImgRepo>> allData (@Path("comments") String comments);
 
 
 
