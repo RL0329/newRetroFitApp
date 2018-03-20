@@ -44,10 +44,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.MyVie
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-         TextView name;
-         TextView des;
-         ImageView photo;
-         ImgRepo selectedPlace;
+        TextView name;
+        TextView des;
+        ImageView photo;
+        ImgRepo selectedPlace;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -98,7 +98,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.MyVie
         notifyDataSetChanged();
     }
 
-    public void add(ImgRepo s) {
+    public void getAddPlaces(ImgRepo s) {
         places.add(s);
         notifyDataSetChanged();
     }
