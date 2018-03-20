@@ -137,6 +137,10 @@ public class FragList extends Fragment {
                 java.util.ArrayList<ImgRepo> repos = response.body();
                 recyclerAdapter = new RecyclerAdapter(repos, getContext());
                 recyclerView.setAdapter(recyclerAdapter);
+//                java.util.ArrayList<ImgRepo> rowcount = response.body();
+                int rowCount = repos.size();
+                Toast.makeText(getContext(),"tablesize = "+ rowCount,Toast.LENGTH_SHORT).show();
+
 
 
             }
@@ -274,6 +278,6 @@ public class FragList extends Fragment {
 //
 //            }
 //        }, 3000);
-    }
+//    }
 
-//}
+}
