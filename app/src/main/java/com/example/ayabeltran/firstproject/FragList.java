@@ -219,7 +219,7 @@ public class FragList extends Fragment {
                 System.out.println("items on screen: " + itemsOnScreen);
                 System.out.println("total items:" + totalItems);
 
-                if (isScrolling && (lastVisItem + 2) > listSize && (listSize < rowCount)) {
+                if (isScrolling && (lastVisItem + 2) > listSize && (listSize < 15)) {
 
                     fetchData();
                     isScrolling = false;
@@ -296,12 +296,17 @@ public class FragList extends Fragment {
         Call<java.util.ArrayList<ImgRepo>>call = client.fetchNewData("comments");
         call.enqueue(new Callback<java.util.ArrayList<ImgRepo>> () {
             @Override
-            public void onResponse (Call<java.util.ArrayList<ImgRepo>>
-                                            call, Response<java.util.ArrayList<ImgRepo>>response){
+            public void onResponse (Call<java.util.ArrayList<ImgRepo>> call, Response<java.util.ArrayList<ImgRepo>>response){
 
                 java.util.ArrayList<ImgRepo> newdata = response.body();
                 recyclerAdapter = new RecyclerAdapter(newdata, getContext());
                 recyclerView.setAdapter(recyclerAdapter);
+
+                int count = newdata.size();
+
+                for(int i=0;i<count;i++){
+                    places.add(i);
+                }
 
 
 
