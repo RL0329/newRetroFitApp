@@ -1,6 +1,5 @@
 package com.example.ayabeltran.firstproject;
 
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,8 +7,8 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,7 @@ import android.widget.AbsListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -34,16 +33,18 @@ public class FragGrid extends Fragment {
     RecyclerView recyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     SwipeRefreshLayout mswipeRefreshLayout;
-    ArrayList<ImgRepo> places = new ArrayList();
+    ArrayList<Integer> gridplaces = new ArrayList();
     dbhelper mydb;
     SQLiteDatabase sqLiteDatabase;
-    Cursor cursor;
-    GridAdapter gridAdapter;
-    Boolean isScrolling=false;
-    int totalItems;
+    //    Cursor pulled;
     ProgressBar progressBar,
             progressBar2;
-    Cursor pulled;
+    GridAdapter gridAdapter;
+
+    Boolean isScrolling = false;
+    public static int gridtotalItems;
+    int rowCount;
+    int gridlistSize;
 
     public FragGrid() {
         // Required empty public constructor
@@ -52,73 +53,63 @@ public class FragGrid extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_frag_grid, container, false);
+        final View v = inflater.inflate(R.layout.fragment_frag_grid, container, false);
 
         recyclerView = v.findViewById(R.id.recyclerview);
         mswipeRefreshLayout = v.findViewById(R.id.swiperefresh);
         progressBar = v.findViewById(R.id.progress);
         progressBar2 = v.findViewById(R.id.progress2);
 
+
         // adapter
-        gridAdapter = new GridAdapter(places, getActivity());
-        recyclerView.setAdapter(gridAdapter);
         mLayoutManager = new GridLayoutManager(getActivity(),3);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLayoutManager);
 
 //        mydb = new dbhelper(getActivity());
 //        sqLiteDatabase = mydb.getReadableDatabase();
-//        cursor = mydb.gridItemslisted(sqLiteDatabase);
 
 //        refreshList();
-//        EndlessScroll();
 
+
+        getDataFromServer();
         loadData();
-        mswipeRefreshLayout.setRefreshing(false);
+        EndlessScroll();
 
+        mswipeRefreshLayout.setRefreshing(false);
 
         mswipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh(){
-                places.clear();
-//                refreshList();
+            public void onRefresh() {
+
+
+                gridplaces.clear();
+                gridlistSize = gridplaces.size();
+
+
                 loadData();
+//              refreshList();
 
-                if(mswipeRefreshLayout.isRefreshing()){
+                if (mswipeRefreshLayout.isRefreshing())
 
-                            gridAdapter.notifyDataSetChanged();
+                    progressBar2.setVisibility(View.GONE);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 3; i++) {
+
+//                            recyclerAdapter.notifyDataSetChanged();
+                            progressBar2.setVisibility(View.GONE);
                             mswipeRefreshLayout.setRefreshing(false);
-                }
+                        }
+
+                    }
+                }, 3000);
+
             }
         });
-
-
-//        mswipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh(){
-//                places.clear();
-////                refreshList();
-//                loadData();
-//
-//                if(mswipeRefreshLayout.isRefreshing())
-//
-//                    progressBar2.setVisibility(View.GONE);
-//                Handler handler = new Handler();
-//                handler.postDelayed(new Runnable() {
-//
-//                    @Override
-//                    public void run() {
-//                        for (int i = 0; i < 3; i++) {
-//
-//                            gridAdapter.notifyDataSetChanged();
-//                            progressBar2.setVisibility(View.GONE);
-//                            mswipeRefreshLayout.setRefreshing(false);
-//                        }
-//
-//                    }
-//                }, 3000);
-//            }
-//        });
 
         // Inflate the layout for this fragment
         return v;
@@ -129,8 +120,44 @@ public class FragGrid extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    public void getDataFromServer() {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
-    private void loadData(){
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl(create_user.baseURL)
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = builder.client(httpClient.build()).build();
+
+        gitHubClient client = retrofit.create(gitHubClient.class);
+        Call<java.util.ArrayList<ImgRepo>> call = client.allData("comments");
+
+
+        call.enqueue(new Callback<java.util.ArrayList<ImgRepo>>() {
+            @Override
+            public void onResponse(Call<java.util.ArrayList<ImgRepo>> call, Response<ArrayList<ImgRepo>> response) {
+                ArrayList<ImgRepo> mGetAllData = response.body();
+
+                if (mGetAllData.isEmpty()) {
+                    Toast.makeText(getActivity(), "No data found", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    rowCount = mGetAllData.size();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<java.util.ArrayList<ImgRepo>> call, Throwable t) {
+
+                Toast.makeText(getActivity(), "error in fraglist", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+    private void loadData() {
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -140,158 +167,227 @@ public class FragGrid extends Fragment {
 
         Retrofit retrofit = builder.client(httpClient.build()).build();
 
-        gitHubClient client =  retrofit.create(gitHubClient.class);
-        Call<ArrayList<ImgRepo>> call = client.displayimg("comments");
+        gitHubClient client = retrofit.create(gitHubClient.class);
+        Call<java.util.ArrayList<ImgRepo>> call = client.displaygridimg("comments");
 
-        call.enqueue(new Callback<ArrayList<ImgRepo>>() {
+        call.enqueue(new Callback<java.util.ArrayList<ImgRepo>>() {
             @Override
-            public void onResponse(Call<ArrayList<ImgRepo>> call, Response<ArrayList<ImgRepo>> response) {
+            public void onResponse(Call<java.util.ArrayList<ImgRepo>> call, Response<java.util.ArrayList<ImgRepo>> response) {
 
+                Toast.makeText(getContext(), "Load", Toast.LENGTH_SHORT).show();
                 java.util.ArrayList<ImgRepo> repos = response.body();
                 gridAdapter = new GridAdapter(repos, getContext());
                 recyclerView.setAdapter(gridAdapter);
 
+                gridlistSize = repos.size();
+
+//                int count = repos.size();
+
+//                for(int i=0;i<count;i++){
+//                    gridplaces.add(i);
+//                    gridlistSize = gridplaces.size();
+//                }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<ImgRepo>> call, Throwable t) {
+            public void onFailure(Call<java.util.ArrayList<ImgRepo>> call, Throwable t) {
 
+                Toast.makeText(getActivity(), "error in fraglist", Toast.LENGTH_SHORT).show();
             }
         });
 
-//        call.enqueue(new Callback<ArrayList<ImgRepo>>() {
-//            @Override
-//            public void onResponse(Call<java.util.ArrayList<ImgRepo>> call, Response<ArrayList<ImgRepo>> response) {
-//
-//                java.util.ArrayList<ImgRepo> repos = response.body();
-//                recyclerAdapter = new RecyclerAdapter(repos, getContext());
-//                recyclerView.setAdapter(recyclerAdapter);
-//
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<java.util.ArrayList<ImgRepo>> call, Throwable t) {
-//
-//                Toast.makeText(getActivity(),"error in fraglist",Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
     }
 
-//    private void EndlessScroll(){
-//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-//                    isScrolling = true;
-//                }
-//            }
+
+    private void EndlessScroll() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                gridtotalItems = mLayoutManager.getItemCount();
+//                pulled = pulledItems(sqLiteDatabase);
+
+
+
+
+                int griditemsOnScreen = mLayoutManager.getChildCount();
+                int gridlastVisItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+
+//                System.out.println("row count: " + rowCount);
+//                System.out.println("gridlist size: " + gridlistSize);
+//                System.out.println("grid last visible item: " + gridlastVisItem);
+//                System.out.println("griditems on screen: " + griditemsOnScreen);
+//                System.out.println("gridtotal items:" + gridtotalItems);
+
+                if (isScrolling && (gridlastVisItem + 2) > gridlistSize && (gridlistSize < rowCount)) {
+
+                    progressBar.setVisibility(View.VISIBLE);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < 3; i++) {
+
+//                            recyclerAdapter.notifyDataSetChanged();
+                                progressBar.setVisibility(View.GONE);
+                                isScrolling = false;
+                            }
+
+                        }
+                    }, 3000);
+
+
+                    fetchData();
+//                    gridlistSize = gridplaces.size();
+
+                }
+            }
+
+        });
+    }
+//private void displayimg(){
 //
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                totalItems = mLayoutManager.getItemCount();
-//                pulled = pulledItens(sqLiteDatabase);
-//                int rowCount = mydb.getimgTableCount();
-//                int listSize = places.size();
-//                int itemsOnScreen = mLayoutManager.getChildCount();
-//                int lastVisItem = ((GridLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+//}
 //
-//
-//                System.out.println("list size: "+listSize);
-//                System.out.println("last visible item: "+lastVisItem);
-//                System.out.println("items on screen: "+itemsOnScreen);
-//
-//                if (isScrolling && (lastVisItem + 2) > listSize && (listSize < rowCount)) {
-//
-//                    fetchData();
-//                }
-//
-//            }
-//        });
+//    public Cursor pulledItems(SQLiteDatabase db) {
+//        String pull = "select * from imgTable order by " + dbhelper.imgID + " desc limit 5 offset " + (totalItems);
+//        Log.d("pull", pull);
+//        Cursor cursor = db.rawQuery(pull, null);
+//        return cursor;
 //    }
 
-//    public Cursor pulledItens(SQLiteDatabase db) {
-//                String pull = "select * from imgTable order by " + dbhelper.imgID + " desc limit 5 offset " + totalItems;
-//                Log.d("pull", pull);
-//                Cursor cursor = db.rawQuery(pull, null);
-//                return cursor;
+//    private ArrayList<ImgRepo> convertCursorToListPlace(Cursor cursor) {
+//        ArrayList<ImgRepo> places = new ArrayList<>();
+
+//        if (cursor.moveToFirst()) {
+//            do {
+//                int id;
+//                String name, des;
+//                byte[] photo;
+//
+//                id = cursor.getInt(cursor.getColumnIndex("id"));
+//                photo = cursor.getBlob(cursor.getColumnIndex("photo"));
+//                name = cursor.getString(cursor.getColumnIndex("name"));
+//                des = cursor.getString(cursor.getColumnIndex("des"));
+//
+//                ImgRepo place = new Place(id, photo, name, des);
+//                places.add(place);
 //            }
+//            while (cursor.moveToNext());
 //
-//    private ArrayList<Place> convertCursorToListPlace(Cursor cursor) {
-//                ArrayList<Place> places = new ArrayList<>();
-//                if (cursor.moveToFirst()) {
-//                    do {
-//                        int id;
-//                        String name, des;
-//                        byte[] photo;
+//        }
 //
-//                        id = cursor.getInt(cursor.getColumnIndex("id"));
-//                        photo = cursor.getBlob(cursor.getColumnIndex("photo"));
-//                        name = cursor.getString(cursor.getColumnIndex("name"));
-//                        des = cursor.getString(cursor.getColumnIndex("des"));
+//        return places;
+    //}
+
+//    private void refreshList() {
+//        Cursor cursor = getItemsFromDB();
+//        populateList(cursor);
 //
-//                        Place place = new Place(id, photo, name, des);
-//                        places.add(place);
-//                    }
-//                    while (cursor.moveToNext());
+//    }
+
+//    private Cursor getItemsFromDB() {
+//        return mydb.itemslisted(sqLiteDatabase);
+//    }
+
+    //    private void populateList(Cursor cursor) {
+//        places = convertCursorToListPlace(cursor);
 //
+//        recyclerAdapter = new RecyclerAdapter(places, getContext());
+//
+//        recyclerView.setAdapter(recyclerAdapter);
+//    }
+//
+    private void fetchData() {
+
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl(create_user.baseURL)
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = builder.client(httpClient.build()).build();
+
+        gitHubClient client = retrofit.create(gitHubClient.class);
+        Call<java.util.ArrayList<ImgRepo>>call = client.fetchNewGridData("comments");
+        call.enqueue(new Callback<java.util.ArrayList<ImgRepo>> () {
+            @Override
+            public void onResponse (Call<java.util.ArrayList<ImgRepo>> call, Response<java.util.ArrayList<ImgRepo>>response){
+
+                java.util.ArrayList<ImgRepo> newdata = response.body();
+                gridAdapter = new GridAdapter(newdata, getContext());
+                recyclerView.setAdapter(gridAdapter);
+
+
+                gridlistSize = newdata.size();
+
+//                int count = newdata.size();
+//
+//                for(int i=0;i<count;i++){
+//                    gridplaces.add(i);
 //                }
-//                return places;
+
+
+
+            }
+
+            @Override
+            public void onFailure (Call<java.util.ArrayList<ImgRepo>>call, Throwable t){
+
+                Toast.makeText(getActivity(), "error in fraglist", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+//        if (pulled.moveToFirst()) {
+//            do {
+//                int id;
+//                String name, des;
+//                byte[] photo;
+//
+//                id = pulled.getInt(pulled.getColumnIndex("id"));
+//                photo = pulled.getBlob(pulled.getColumnIndex("photo"));
+//                name = pulled.getString(pulled.getColumnIndex("name"));
+//                des = pulled.getString(pulled.getColumnIndex("des"));
+//
+//                ImgRepo places = new ImgRepo(id, photo, name, des);
+//                recyclerAdapter.getPlaces().add(places);
+//
 //            }
-//    private void refreshList(){
-//                Cursor cursor = getItemsFromDB();
-//                populateList(cursor);
+//            while (pulled.moveToNext());
+//
+//
+//            String count = String.valueOf(totalItems);
+//            Toast.makeText(getActivity(), count, Toast.LENGTH_SHORT).show();
+//        }
+
+//        progressBar.setVisibility(View.VISIBLE);
+//        Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+
+//            @Override
+//            public void run() {
+////                for (int i = 0; i < 3; i++) {
+//
+////                recyclerAdapter.notifyDataSetChanged();
+//                fetchData();
+//                progressBar.setVisibility(View.GONE);
+//
+////                }
+//
 //            }
+
 //
-//    private void populateList(Cursor cursor) {
-//                places = convertCursorToListPlace(cursor);
-//
-//                gridAdapter = new GridAdapter(places, getContext());
-//
-//                recyclerView.setAdapter(gridAdapter);
-//            }
-//
-//    private Cursor getItemsFromDB(){
-//                return mydb.itemslisted(sqLiteDatabase);
-//
-//            }
-//
-//            private void fetchData() {
-//
-//                if (pulled.moveToFirst()) {
-//                    do {
-//                        int id;
-//                        String name, des;
-//                        byte[] photo;
-//
-//                        id = pulled.getInt(pulled.getColumnIndex("id"));
-//                        photo = pulled.getBlob(pulled.getColumnIndex("photo"));
-//                        name = pulled.getString(pulled.getColumnIndex("name"));
-//                        des = pulled.getString(pulled.getColumnIndex("des"));
-//
-//                        Place places = new Place(id, photo, name, des);
-//                        gridAdapter.getPlaces().add(places);
-//                    }
-//                    while (pulled.moveToNext());
-//                }
-//
-//                progressBar.setVisibility(View.VISIBLE);
-//                Handler handler = new Handler();
-//                handler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        for (int i = 0; i < 3; i++) {
-//
-//                            gridAdapter.notifyDataSetChanged();
-//                            progressBar.setVisibility(View.GONE);
-//
-//                        }
-//
-//                    }
-//                }, 3000);
-//            }
-        }
+//        },0);
+    }
+}
 

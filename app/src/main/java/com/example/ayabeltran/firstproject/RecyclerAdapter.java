@@ -56,16 +56,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.MyVie
             this.name = itemView.findViewById(R.id.textname);
             this.des = itemView.findViewById(R.id.textdetails);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent preview = new Intent(context, ListDisplay.class);
-                    preview.putExtra("Key", selectedPlace.getImgname());
-                    preview.putExtra("Key2", selectedPlace.getDesc());
-                    preview.putExtra("Key3", selectedPlace.getImgstring());
-                    context.startActivity(preview);
-                }
-            });
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent preview = new Intent(context, ListDisplay.class);
+//                    preview.putExtra("Key", selectedPlace.getImgname());
+//                    preview.putExtra("Key2", selectedPlace.getDesc());
+//                    preview.putExtra("Key3", selectedPlace.getImgstring());
+//                    context.startActivity(preview);
+//                }
+//            });
         }
     }
     public void onBindViewHolder(MyViewHolder holder, int position) {

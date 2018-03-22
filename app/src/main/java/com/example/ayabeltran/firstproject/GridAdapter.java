@@ -56,16 +56,16 @@ public class GridAdapter extends RecyclerView.Adapter <GridAdapter.MyViewHolder>
             this.photo = itemView.findViewById(R.id.imageViewGrid);
             this.name = itemView.findViewById(R.id.textViewGrid);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent preview = new Intent(context, ListDisplay.class);
-                    preview.putExtra("Key", selectedPlace.getImgname());
-                    preview.putExtra("Key2", selectedPlace.getDesc());
-                    preview.putExtra("Key3", selectedPlace.getImgstring());
-                    context.startActivity(preview);
-                }
-            });
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent preview = new Intent(context, ListDisplay.class);
+//                    preview.putExtra("Key", selectedPlace.getImgname());
+//                    preview.putExtra("Key2", selectedPlace.getDesc());
+//                    preview.putExtra("Key3", selectedPlace.getImgstring());
+//                    context.startActivity(preview);
+//                }
+//            });
         }
     }
 

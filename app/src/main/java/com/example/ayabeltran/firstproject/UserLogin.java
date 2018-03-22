@@ -116,6 +116,9 @@ public class UserLogin extends AppCompatActivity {
 
                     Intent i = new Intent(UserLogin.this, com.example.ayabeltran.firstproject.List.class);
                     startActivity(i);
+                    etloginame.setText("");
+                    etloginpword.setText("");
+
 
 
 

@@ -33,6 +33,9 @@ public interface gitHubClient {
     @GET("{comments}?_sort=id&_order=desc&_page=1&_limit=5")
     Call<java.util.ArrayList<ImgRepo>> displayimg(@Path("comments") String comments);
 
+    @GET("{comments}?_sort=id&_order=desc&_page=1&_limit=12")
+    Call<java.util.ArrayList<ImgRepo>> displaygridimg(@Path("comments") String comments);
+
 
     @POST("posts")
     Call<GitHubRepo>
@@ -40,6 +43,9 @@ public interface gitHubClient {
 
     @GET("{comments}?_sort=id&_order=desc")
     Call<java.util.ArrayList<ImgRepo>>fetchNewData (@Path("comments") String comments);
+
+    @GET("{comments}?_sort=id&_order=desc")
+    Call<java.util.ArrayList<ImgRepo>>fetchNewGridData (@Path("comments") String comments);
 
     @POST("/comments")Call<ImgRepo> addimg(@Body ImgRepo value);
 
