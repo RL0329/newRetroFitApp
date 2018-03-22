@@ -45,6 +45,8 @@ public class FragList extends Fragment {
     int rowCount;
     int listSize;
 
+    public static int pageNumber =1;
+
     public FragList() {
         // Required empty public constructor
     }
@@ -178,6 +180,7 @@ public class FragList extends Fragment {
                 recyclerAdapter = new RecyclerAdapter(repos, getContext());
                 recyclerView.setAdapter(recyclerAdapter);
 
+
                 listSize=repos.size();
 //                int count = repos.size();
 
@@ -237,6 +240,7 @@ public class FragList extends Fragment {
 
 //                            recyclerAdapter.notifyDataSetChanged();
                                 progressBar.setVisibility(View.GONE);
+                                recyclerAdapter.notifyDataSetChanged();
                                 isScrolling = false;
                             }
 
@@ -316,14 +320,21 @@ public class FragList extends Fragment {
         Retrofit retrofit = builder.client(httpClient.build()).build();
 
         gitHubClient client = retrofit.create(gitHubClient.class);
-        Call<java.util.ArrayList<ImgRepo>>call = client.fetchNewData("comments");
+        Call<java.util.ArrayList<ImgRepo>>call = client.fetchNewData(pageNumber);
         call.enqueue(new Callback<java.util.ArrayList<ImgRepo>> () {
             @Override
             public void onResponse (Call<java.util.ArrayList<ImgRepo>> call, Response<java.util.ArrayList<ImgRepo>>response){
 
                 java.util.ArrayList<ImgRepo> newdata = response.body();
-                recyclerAdapter = new RecyclerAdapter(newdata, getContext());
-                recyclerView.setAdapter(recyclerAdapter);
+//                recyclerAdapter = new RecyclerAdapter(newdata, getContext());
+//                recyclerView.setAdapter(recyclerAdapter);
+
+                recyclerAdapter.addPlaces(newdata);
+
+                recyclerAdapter.getItemCount();
+
+//                recyclerAdapter.notifyDataSetChanged();
+
 
                 listSize=newdata.size();
 
@@ -332,8 +343,6 @@ public class FragList extends Fragment {
 //                for(int i=0;i<count;i++){
 //                    places.add(i);
 //                }
-
-
 
             }
 
@@ -386,5 +395,7 @@ public class FragList extends Fragment {
 //
 //        },0);
     }
+
+
 }
 

@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/newRetroFitApp.iml" filepath="$PROJECT_DIR$/newRetroFitApp.iml" />
       <module fileurl="file://C:\Users\gl62\Desktop\mainProj\secondrepo\newRetroFitApp.iml" filepath="C:\Users\gl62\Desktop\mainProj\secondrepo\newRetroFitApp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/secondrepo.iml" filepath="$PROJECT_DIR$/secondrepo.iml" />
       <module fileurl="file://C:\Users\ayabeltran\Desktop\Projects\WebServer\newRetroFitApp\secondrepo.iml" filepath="C:\Users\ayabeltran\Desktop\Projects\WebServer\newRetroFitApp\secondrepo.iml" />
     </modules>
   </component>

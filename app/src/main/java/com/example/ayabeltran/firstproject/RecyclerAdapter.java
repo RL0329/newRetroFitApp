@@ -22,6 +22,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.MyVie
     private ArrayList<ImgRepo> places = new ArrayList<>();
     private Context context;
 
+
+
     public RecyclerAdapter(ArrayList<ImgRepo> places, Context context) {
         this.places = places;
         this.context = context;
@@ -42,12 +44,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.MyVie
         return holder;
     }
 
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView name;
         TextView des;
         ImageView photo;
         ImgRepo selectedPlace;
+
+
+
+
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -98,11 +105,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.MyVie
         notifyDataSetChanged();
     }
 
-    public void getAddPlaces(ImgRepo s) {
-        places.add(s);
+    public void addPlace(ImgRepo item) {
+        places.add(item);
         notifyDataSetChanged();
     }
 
+    public void addPlaces(ArrayList<ImgRepo> items) {
+        places.addAll(items);
+        notifyDataSetChanged();
+    }
 }
 
 

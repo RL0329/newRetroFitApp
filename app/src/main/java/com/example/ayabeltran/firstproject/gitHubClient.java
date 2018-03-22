@@ -41,8 +41,8 @@ public interface gitHubClient {
     Call<GitHubRepo>
     adduser(@Body GitHubRepo posts);
 
-    @GET("{comments}?_sort=id&_order=desc")
-    Call<java.util.ArrayList<ImgRepo>>fetchNewData (@Path("comments") String comments);
+    @GET("comments?_sort=id&_order=desc&_limit=5&_page={pageNumber}")
+    Call<java.util.ArrayList<ImgRepo>>fetchNewData (@Path("pageNumber") int pageNumber);
 
     @GET("{comments}?_sort=id&_order=desc")
     Call<java.util.ArrayList<ImgRepo>>fetchNewGridData (@Path("comments") String comments);
