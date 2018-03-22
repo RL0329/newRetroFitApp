@@ -81,7 +81,11 @@ public class FragList extends Fragment {
         mswipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                places.clear();
+
+
+               places.clear();
+               listSize = places.size();
+
 
                 loadData();
 //              refreshList();
@@ -174,11 +178,11 @@ public class FragList extends Fragment {
                 java.util.ArrayList<ImgRepo> repos = response.body();
                 recyclerAdapter = new RecyclerAdapter(repos, getContext());
                 recyclerView.setAdapter(recyclerAdapter);
-
                 int count = repos.size();
 
                 for(int i=0;i<count;i++){
                   places.add(i);
+                  listSize = places.size();
                 }
             }
 
@@ -209,7 +213,8 @@ public class FragList extends Fragment {
 //                pulled = pulledItems(sqLiteDatabase);
 
 
-                int listSize = places.size();
+
+
                 int itemsOnScreen = mLayoutManager.getChildCount();
                 int lastVisItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
@@ -219,10 +224,27 @@ public class FragList extends Fragment {
                 System.out.println("items on screen: " + itemsOnScreen);
                 System.out.println("total items:" + totalItems);
 
-                if (isScrolling && (lastVisItem + 2) > listSize && (listSize < 15)) {
+                if (isScrolling && (lastVisItem + 2) > listSize && (listSize < rowCount)) {
+
+                    progressBar.setVisibility(View.VISIBLE);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < 3; i++) {
+
+//                            recyclerAdapter.notifyDataSetChanged();
+                                progressBar.setVisibility(View.GONE);
+                                isScrolling = false;
+                            }
+
+                        }
+                    }, 3000);
+
 
                     fetchData();
-                    isScrolling = false;
+                    listSize = places.size();
 
                 }
             }
