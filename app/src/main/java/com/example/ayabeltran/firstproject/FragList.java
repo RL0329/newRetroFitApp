@@ -93,7 +93,7 @@ public class FragList extends Fragment {
 
                 if (mswipeRefreshLayout.isRefreshing())
 
-                    progressBar2.setVisibility(View.VISIBLE);
+                    progressBar2.setVisibility(View.GONE);
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
 
@@ -247,7 +247,7 @@ public class FragList extends Fragment {
                         }
                     }, 3000);
 
-
+                    pageNumber++;
                     fetchData();
 //                    listSize = places.size();
 
@@ -320,7 +320,7 @@ public class FragList extends Fragment {
         Retrofit retrofit = builder.client(httpClient.build()).build();
 
         gitHubClient client = retrofit.create(gitHubClient.class);
-        Call<java.util.ArrayList<ImgRepo>>call = client.fetchNewData(pageNumber);
+        Call<java.util.ArrayList<ImgRepo>>call = client.fetchNewData("id", "desc", 5,pageNumber);
         call.enqueue(new Callback<java.util.ArrayList<ImgRepo>> () {
             @Override
             public void onResponse (Call<java.util.ArrayList<ImgRepo>> call, Response<java.util.ArrayList<ImgRepo>>response){
