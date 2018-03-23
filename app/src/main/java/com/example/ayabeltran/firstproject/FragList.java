@@ -4,7 +4,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,20 +30,28 @@ public class FragList extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     RecyclerView recyclerView;
+
     private RecyclerView.LayoutManager mLayoutManager;
+
     SwipeRefreshLayout mswipeRefreshLayout;
-    dbhelper mydb;
-    SQLiteDatabase sqLiteDatabase;
-    //    Cursor pulled;
+
     ProgressBar progressBar,
-            progressBar2;
+                progressBar2;
+
     RecyclerAdapter recyclerAdapter;
 
     Boolean isScrolling = false;
-//    public static int totalItems;
+
     int rowCount;
-    public int pageNumber =1;
+
+    int pageNumber =1;
+
     boolean isfetching = false;
+
+
+//    dbhelper mydb;
+//    SQLiteDatabase sqLiteDatabase;
+//    Cursor pulled;
 
 
 
@@ -70,10 +77,7 @@ public class FragList extends Fragment {
 
 //        mydb = new dbhelper(getActivity());
 //        sqLiteDatabase = mydb.getReadableDatabase();
-
 //        refreshList();
-
-
 
         getDataFromServer();
         loadData();
@@ -85,11 +89,7 @@ public class FragList extends Fragment {
             @Override
             public void onRefresh() {
 
-//               recyclerAdapter.clear();
-
-
                 loadData();
-//              refreshList();
 
                 if (mswipeRefreshLayout.isRefreshing())
 
@@ -99,16 +99,11 @@ public class FragList extends Fragment {
 
                     @Override
                     public void run() {
-                        for (int i = 0; i < 3; i++) {
 
-//                            recyclerAdapter.notifyDataSetChanged();
                             progressBar2.setVisibility(View.GONE);
                             mswipeRefreshLayout.setRefreshing(false);
-                        }
-
                     }
                 }, 3000);
-
             }
         });
 
@@ -141,11 +136,12 @@ public class FragList extends Fragment {
 
                 if (mGetAllData.isEmpty()) {
                     Toast.makeText(getActivity(), "No data found", Toast.LENGTH_SHORT).show();
-                } else {
+                }
+
+                else {
 
                     rowCount = mGetAllData.size();
                 }
-
 
             }
 
@@ -159,6 +155,7 @@ public class FragList extends Fragment {
     }
 
     private void loadData() {
+
         pageNumber=1;
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
@@ -176,18 +173,10 @@ public class FragList extends Fragment {
             @Override
             public void onResponse(Call<java.util.ArrayList<ImgRepo>> call, Response<java.util.ArrayList<ImgRepo>> response) {
 
-                Toast.makeText(getContext(), "Load", Toast.LENGTH_SHORT).show();
                 java.util.ArrayList<ImgRepo> repos = response.body();
                 recyclerAdapter = new RecyclerAdapter(repos, getContext());
                 recyclerView.setAdapter(recyclerAdapter);
 
-
-
-//                int count = repos.size();
-
-//                for(int i=0;i<count;i++){
-//                  places.add(i);
-//                }
             }
 
             @Override
@@ -198,7 +187,6 @@ public class FragList extends Fragment {
         });
 
     }
-
 
     private void EndlessScroll() {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -213,13 +201,12 @@ public class FragList extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+
                 int totalItems = mLayoutManager.getItemCount();
-                int itemsOnScreen = mLayoutManager.getChildCount();
                 int lastVisItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
                 System.out.println("row count: " + rowCount);
                 System.out.println("last visible item: " + lastVisItem);
-                System.out.println("items on screen: " + itemsOnScreen);
                 System.out.println("total items:" + totalItems);
                 System.out.println("recycler count:" + recyclerAdapter.getItemCount());
                 System.out.println("page no:" + pageNumber);
@@ -240,17 +227,12 @@ public class FragList extends Fragment {
 
                             if(isfetching==true){
 
-                                Toast.makeText(getActivity(),"fetching true",Toast.LENGTH_SHORT).show();
+
                             }
                             else{
-                                Toast.makeText(getActivity(),"fetching false",Toast.LENGTH_SHORT).show();
-
-
                                 pageNumber++;
                                 fetchData();
                             }
-
-
                         }
                     }, 3000);
 
@@ -315,7 +297,6 @@ public class FragList extends Fragment {
     private void fetchData() {
 
         isfetching =true;
-        Toast.makeText(getActivity(),"goats",Toast.LENGTH_SHORT).show();
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -327,29 +308,18 @@ public class FragList extends Fragment {
 
         gitHubClient client = retrofit.create(gitHubClient.class);
         Call<java.util.ArrayList<ImgRepo>>call = client.fetchNewData("id", "desc", 5,pageNumber);
-//        Call<java.util.ArrayList<ImgRepo>>call = client.fetchNewData("comments");
+
         call.enqueue(new Callback<java.util.ArrayList<ImgRepo>> () {
             @Override
             public void onResponse (Call<java.util.ArrayList<ImgRepo>> call, Response<java.util.ArrayList<ImgRepo>>response){
 
                 java.util.ArrayList<ImgRepo> newdata = response.body();
-//                recyclerAdapter = new RecyclerAdapter(newdata, getContext());
-//                recyclerView.setAdapter(recyclerAdapter);
 
                 recyclerAdapter.addPlaces(newdata);
 
                 recyclerAdapter.getItemCount();
 
-//                recyclerAdapter.notifyDataSetChanged();
-
                 isfetching = false;
-
-
-//                int count = newdata.size();
-//
-//                for(int i=0;i<count;i++){
-//                    places.add(i);
-//                }
 
             }
 

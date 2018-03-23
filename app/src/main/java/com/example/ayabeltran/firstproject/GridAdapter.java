@@ -23,6 +23,7 @@ import java.util.Base64;
 
 public class GridAdapter extends RecyclerView.Adapter <GridAdapter.MyViewHolder> {
 
+    private LayoutInflater gInflater;
     private ArrayList<ImgRepo> places = new ArrayList<>();
     private Context context;
 
@@ -37,7 +38,7 @@ public class GridAdapter extends RecyclerView.Adapter <GridAdapter.MyViewHolder>
 
     @Override
     public GridAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater gInflater = LayoutInflater.from(context);
+        gInflater = LayoutInflater.from(context);
         View view1 = gInflater.inflate(R.layout.activity_grid_view_layout, parent, false);
         GridAdapter.MyViewHolder holder = new GridAdapter.MyViewHolder(view1);
         return holder;
@@ -95,5 +96,16 @@ public class GridAdapter extends RecyclerView.Adapter <GridAdapter.MyViewHolder>
     public int getItemCount() {
         return places.size();
     }
+
+    public void addPlace(ImgRepo item) {
+        places.add(item);
+        notifyDataSetChanged();
+    }
+
+    public void addPlaces(ArrayList<ImgRepo> items) {
+        places.addAll(items);
+        notifyDataSetChanged();
+    }
+
 
 }

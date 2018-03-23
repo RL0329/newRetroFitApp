@@ -38,9 +38,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.MyVie
         mInflater = LayoutInflater.from(context);
         View view = mInflater.inflate(R.layout.activity_list_display, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
-//        gInflater = LayoutInflater.from(context);
-//        View view1 = gInflater.inflate(R.layout.gridview,parent,false);
-//        MyViewHolder holder1 = new MyViewHolder(view1);
         return holder;
     }
 

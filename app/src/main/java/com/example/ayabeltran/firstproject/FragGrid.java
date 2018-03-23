@@ -33,18 +33,17 @@ public class FragGrid extends Fragment {
     RecyclerView recyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     SwipeRefreshLayout mswipeRefreshLayout;
-    ArrayList<Integer> gridplaces = new ArrayList();
     dbhelper mydb;
-    SQLiteDatabase sqLiteDatabase;
-    //    Cursor pulled;
+//    SQLiteDatabase sqLiteDatabase;
+//    Cursor pulled;
     ProgressBar progressBar,
             progressBar2;
     GridAdapter gridAdapter;
 
     Boolean isScrolling = false;
-    public static int gridtotalItems;
     int rowCount;
-    int gridlistSize;
+    int gridPageNumber =1;
+    boolean isfetching = false;
 
     public FragGrid() {
         // Required empty public constructor
@@ -81,35 +80,24 @@ public class FragGrid extends Fragment {
         mswipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                    loadData();
 
+                    if (mswipeRefreshLayout.isRefreshing())
 
-                gridplaces.clear();
-                gridlistSize = gridplaces.size();
+                        progressBar2.setVisibility(View.GONE);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
 
+                        @Override
+                        public void run() {
 
-                loadData();
-//              refreshList();
-
-                if (mswipeRefreshLayout.isRefreshing())
-
-                    progressBar2.setVisibility(View.GONE);
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 3; i++) {
-
-//                            recyclerAdapter.notifyDataSetChanged();
                             progressBar2.setVisibility(View.GONE);
                             mswipeRefreshLayout.setRefreshing(false);
                         }
-
-                    }
-                }, 3000);
-
+                    }, 3000);
             }
         });
+
 
         // Inflate the layout for this fragment
         return v;
@@ -159,6 +147,8 @@ public class FragGrid extends Fragment {
 
     private void loadData() {
 
+        gridPageNumber = 1;
+
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         Retrofit.Builder builder = new Retrofit.Builder()
@@ -174,25 +164,16 @@ public class FragGrid extends Fragment {
             @Override
             public void onResponse(Call<java.util.ArrayList<ImgRepo>> call, Response<java.util.ArrayList<ImgRepo>> response) {
 
-                Toast.makeText(getContext(), "Load", Toast.LENGTH_SHORT).show();
                 java.util.ArrayList<ImgRepo> repos = response.body();
                 gridAdapter = new GridAdapter(repos, getContext());
                 recyclerView.setAdapter(gridAdapter);
 
-                gridlistSize = repos.size();
-
-//                int count = repos.size();
-
-//                for(int i=0;i<count;i++){
-//                    gridplaces.add(i);
-//                    gridlistSize = gridplaces.size();
-//                }
             }
 
             @Override
             public void onFailure(Call<java.util.ArrayList<ImgRepo>> call, Throwable t) {
 
-                Toast.makeText(getActivity(), "error in fraglist", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "error in fraggrid", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -212,22 +193,18 @@ public class FragGrid extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                gridtotalItems = mLayoutManager.getItemCount();
-//                pulled = pulledItems(sqLiteDatabase);
 
-
-
-
-                int griditemsOnScreen = mLayoutManager.getChildCount();
+                int gridtotalItems = mLayoutManager.getItemCount();
                 int gridlastVisItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
-//                System.out.println("row count: " + rowCount);
-//                System.out.println("gridlist size: " + gridlistSize);
-//                System.out.println("grid last visible item: " + gridlastVisItem);
-//                System.out.println("griditems on screen: " + griditemsOnScreen);
-//                System.out.println("gridtotal items:" + gridtotalItems);
+                System.out.println("row count: " + rowCount);
+                System.out.println("grid last visible item: " + gridlastVisItem);
+                System.out.println("gridtotal items:" + gridtotalItems);
+                System.out.println("grid page no:" + gridPageNumber);
 
-                if (isScrolling && (gridlastVisItem + 2) > gridlistSize && (gridlistSize < rowCount)) {
+
+
+                if (isScrolling && (gridlastVisItem + 1) == gridtotalItems && (gridtotalItems < rowCount)) {
 
                     progressBar.setVisibility(View.VISIBLE);
                     Handler handler = new Handler();
@@ -235,19 +212,23 @@ public class FragGrid extends Fragment {
 
                         @Override
                         public void run() {
-                            for (int i = 0; i < 3; i++) {
 
-//                            recyclerAdapter.notifyDataSetChanged();
-                                progressBar.setVisibility(View.GONE);
-                                isScrolling = false;
+                            progressBar.setVisibility(View.GONE);
+                            gridAdapter.notifyDataSetChanged();
+                            isScrolling = false;
+
+                            if(isfetching==true){
+
+                                Toast.makeText(getActivity(),"fetching true",Toast.LENGTH_SHORT).show();
                             }
+                            else{
+                                Toast.makeText(getActivity(),"fetching false",Toast.LENGTH_SHORT).show();
 
+                                gridPageNumber++;
+                                fetchData();
+                            }
                         }
                     }, 3000);
-
-
-                    fetchData();
-//                    gridlistSize = gridplaces.size();
 
                 }
             }
@@ -309,6 +290,8 @@ public class FragGrid extends Fragment {
 //
     private void fetchData() {
 
+        isfetching =true;
+
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         Retrofit.Builder builder = new Retrofit.Builder()
@@ -318,32 +301,25 @@ public class FragGrid extends Fragment {
         Retrofit retrofit = builder.client(httpClient.build()).build();
 
         gitHubClient client = retrofit.create(gitHubClient.class);
-        Call<java.util.ArrayList<ImgRepo>>call = client.fetchNewGridData("comments");
+        Call<java.util.ArrayList<ImgRepo>>call = client.fetchNewGridData("id","desc",12,gridPageNumber );
         call.enqueue(new Callback<java.util.ArrayList<ImgRepo>> () {
             @Override
             public void onResponse (Call<java.util.ArrayList<ImgRepo>> call, Response<java.util.ArrayList<ImgRepo>>response){
 
                 java.util.ArrayList<ImgRepo> newdata = response.body();
-                gridAdapter = new GridAdapter(newdata, getContext());
-                recyclerView.setAdapter(gridAdapter);
 
+                gridAdapter.addPlaces(newdata);
 
-                gridlistSize = newdata.size();
+                gridAdapter.getItemCount();
 
-//                int count = newdata.size();
-//
-//                for(int i=0;i<count;i++){
-//                    gridplaces.add(i);
-//                }
-
-
+                isfetching = false;
 
             }
 
             @Override
             public void onFailure (Call<java.util.ArrayList<ImgRepo>>call, Throwable t){
 
-                Toast.makeText(getActivity(), "error in fraglist", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "error in fraggrid", Toast.LENGTH_SHORT).show();
             }
         });
 

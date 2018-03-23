@@ -42,14 +42,23 @@ public interface gitHubClient {
     adduser(@Body GitHubRepo posts);
 
     @GET("comments")
-    Call<java.util.ArrayList<ImgRepo>>fetchNewData (@Query("_sort") String id,@Query("_order")String desc, @Query("_limit") int limit, @Query("_page") int pageNumber);
+    Call<java.util.ArrayList<ImgRepo>>fetchNewData (@Query("_sort") String id,
+                                                    @Query("_order")String desc,
+                                                    @Query("_limit") int limit,
+                                                    @Query("_page") int pageNumber);
+
+    @GET("comments")
+    Call<java.util.ArrayList<ImgRepo>>fetchNewGridData (@Query("_sort") String id,
+                                                    @Query("_order")String desc,
+                                                    @Query("_limit") int limit,
+                                                    @Query("_page") int pageNumber);
 
 //    @GET("{comments}?_sort=id&_order=desc&_limit=5}")
 //    Call<java.util.ArrayList<ImgRepo>>fetchNewData (@Path("comments") String comments);
 
 
-    @GET("{comments}?_sort=id&_order=desc")
-    Call<java.util.ArrayList<ImgRepo>>fetchNewGridData (@Path("comments") String comments);
+//    @GET("{comments}?_sort=id&_order=desc")
+//    Call<java.util.ArrayList<ImgRepo>>fetchNewGridData (@Path("comments") String comments);
 
     @POST("/comments")Call<ImgRepo> addimg(@Body ImgRepo value);
 
