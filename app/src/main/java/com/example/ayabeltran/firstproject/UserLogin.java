@@ -22,19 +22,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserLogin extends AppCompatActivity {
 
-    dbhelper mydb;
-
     public static EditText etloginame, etloginpword;
     Button btn_login;
-//    SQLiteDatabase sqLiteDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_login);
-
-        mydb = new dbhelper(this);
-
         etloginame =  findViewById(R.id.etLoginUname);
         etloginpword = findViewById(R.id.etLoginPword);
         btn_login = findViewById(R.id.btn_Login);
@@ -64,25 +58,6 @@ public class UserLogin extends AppCompatActivity {
                         }
 
                         serverLogin();
-
-
-//                        mydb = new dbhelper(UserLogin.this);
-//                        sqLiteDatabase = mydb.getReadableDatabase();
-//                        Cursor res = mydb.userlogin(loginame, loginpword, sqLiteDatabase);
-//
-//                        if(res.moveToFirst()){
-//                            Intent intent = new Intent(UserLogin.this,List.class);
-//                            startActivity(intent);
-//
-//                            Toast.makeText(UserLogin.this, "welcome "+loginame+"!", Toast.LENGTH_SHORT).show();
-//                        }
-//                            else {
-//                                Toast.makeText(UserLogin.this, "your username and password do not match!", Toast.LENGTH_LONG).show();
-//                                etloginame.setText("");
-//                                etloginpword.setText("");
-//                                etloginame.requestFocus();
-//                            }
-
                     }
                 }
         );
@@ -119,12 +94,6 @@ public class UserLogin extends AppCompatActivity {
                     etloginame.setText("");
                     etloginpword.setText("");
 
-
-
-
-//                    Intent i = new Intent(UserLogin.this,List.class);
-//                    startActivity(i);
-
                 }
             }
 
@@ -134,7 +103,5 @@ public class UserLogin extends AppCompatActivity {
                 Toast.makeText(UserLogin.this,"error in login",Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 }

@@ -12,16 +12,13 @@ public class GridViewLayout extends AppCompatActivity {
     ImageView image;
     TextView name;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grid_view_layout);
 
-
             image = findViewById(R.id.imageViewGrid);
             name = findViewById(R.id.textViewGrid);
-
 
             Bundle extra = getIntent().getExtras();
             String  Key = extra.getString("Key");

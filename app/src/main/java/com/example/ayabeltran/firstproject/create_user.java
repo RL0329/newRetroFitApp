@@ -19,7 +19,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class create_user extends AppCompatActivity {
 
-    dbhelper mydb;
     Button btnreg2;
     EditText etemail,
              etuname,
@@ -27,17 +26,14 @@ public class create_user extends AppCompatActivity {
              etcpword,
              etfname,
              etlname;
-    public static final String baseURL = "http://10.20.110.30:3000";
 
-    boolean eUser = false;
-//    GitHubRepo newuser;
+    public static final String baseURL = "http://10.20.110.30:3000";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_user);
-        mydb = new dbhelper(this);
 
         etemail = findViewById(R.id.etEmail);
         etuname = findViewById(R.id.etUname);
@@ -62,21 +58,6 @@ public class create_user extends AppCompatActivity {
                 });
     }
     public void AddUser(){
-
-//        GitHubRepo newuser = new GitHubRepo(
-////        String Nemail = etemail.getText().toString(),
-////                Nuname = etuname.getText().toString(),
-////                Npword = etpword.getText().toString(),
-////                Ncpword = etcpword.getText().toString(),
-////                Nfname = etfname.getText().toString(),
-////                Nlanme = etlname.getText().toString()
-//
-//                etemail.getText().toString(),
-//                etuname.getText().toString(),
-//                etpword.getText().toString(),
-//                etfname.getText().toString(),
-//                etlname.getText().toString()
-//        );
 
 
         if(etemail.getText().toString().isEmpty() || !etemail.getText().toString().contains("@")) {
@@ -117,46 +98,9 @@ public class create_user extends AppCompatActivity {
             return;
         }
 
-
         existingUser();
-
-//        if(eUser = true){
-//            Toast.makeText(this, "username already exists", Toast.LENGTH_SHORT).show();
-//            etuname.requestFocus();
-//            etuname.setText("");
-//            return;
-//        }
-//
-//
-//        ////////////////////////////////////////////////////////////////////////////////////////
-//        else{
-//            addUserRequest(newuser);
-//            Toast.makeText(create_user.this,"registered",Toast.LENGTH_SHORT).show();
-//            finish();
-//
-//        }
-        ////////////////////////////////////////////////////////////////////////////////////////
-
-//        boolean isInserted = mydb.adduser(Nemail, Nuname, Npword, Nfname,Nlanme);
-//
-//        if (isInserted) {
-//
-//            Toast.makeText(create_user.this, "you are now registered.", Toast.LENGTH_LONG).show();
-//
-//            Intent toLogin = new Intent(create_user.this, UserLogin.class);
-//            startActivity(toLogin);
-//        }
-//        else {
-//        Toast.makeText(create_user.this, "your email or username is already in use.", Toast.LENGTH_LONG).show();
-//            etemail.setText("");
-//            etuname.setText("");
-//            etpword.setText("");
-//            etcpword.setText("");
-//            etfname.setText("");
-//            etlname.setText("");
-//        }
     }
-        ////////////////////////////////////////////////////////////////////////////////////////
+
     private void addUserRequest(GitHubRepo newuser) {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -237,5 +181,4 @@ public class create_user extends AppCompatActivity {
 
     }
 
-        ///////////////////////////////////////////////////////////////////////////////////////
 }

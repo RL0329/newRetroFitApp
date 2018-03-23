@@ -59,7 +59,6 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent" />
 
-
             </LinearLayout>
 
     </ScrollView>
@@ -79,12 +78,8 @@
         android:layout_height="wrap_content"
         android:background="#FFEB3B"
         android:text="@string/log_in"
-        android:gravity="center"
-        />
+        android:gravity="center" />
 
 </LinearLayout>
-
-
-
 
 </android.support.v7.widget.LinearLayoutCompat>

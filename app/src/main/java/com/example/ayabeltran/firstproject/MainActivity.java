@@ -9,7 +9,6 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    dbhelper mydb;
     Button btnreg1;
     Button Login;
 
@@ -17,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mydb = new dbhelper(this);
         logIn();
     }
     public void logIn(){

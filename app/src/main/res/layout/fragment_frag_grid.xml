@@ -4,14 +4,12 @@
     android:layout_height="match_parent"
     tools:context="com.example.ayabeltran.firstproject.FragList">
 
-
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|top"
         android:visibility="gone"
-        android:id="@+id/progress2"
-        />
+        android:id="@+id/progress2"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh"

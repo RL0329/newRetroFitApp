@@ -78,7 +78,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.MyVie
         String originalPhoto = places.get(position).getImgstring();
 
 //        converting the photo bytes to usable image
-
         final String pureBase64Encoded = originalPhoto.substring(originalPhoto.indexOf(",")  + 1);
         final byte[] decodedBytes = Base64.decode(pureBase64Encoded, Base64.DEFAULT);
         holder.name.setText(places.get(position).getImgname());

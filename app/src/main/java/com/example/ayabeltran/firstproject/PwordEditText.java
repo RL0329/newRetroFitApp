@@ -82,6 +82,3 @@ public class PwordEditText extends android.support.v7.widget.AppCompatEditText{
         }
     }
 }
-
-
-

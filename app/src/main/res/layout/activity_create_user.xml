@@ -29,8 +29,7 @@
             android:layout_marginTop="32dp"
             android:ems="10"
             android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            />
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/etUname"
@@ -39,8 +38,7 @@
             android:layout_marginTop="32dp"
             android:ems="10"
             android:hint="@string/username"
-            android:inputType="textPersonName"
-            />
+            android:inputType="textPersonName" />
 
         <com.example.ayabeltran.firstproject.PwordEditText
             android:id="@+id/etPword"
@@ -49,8 +47,7 @@
             android:layout_marginTop="32dp"
             android:ems="10"
             android:hint="@string/password"
-            android:inputType="textPassword"
-            />
+            android:inputType="textPassword" />
 
         <com.example.ayabeltran.firstproject.PwordEditText
             android:id="@+id/etCpword"
@@ -59,8 +56,7 @@
             android:layout_marginTop="32dp"
             android:ems="10"
             android:hint="@string/confirm_password"
-            android:inputType="textPassword"
-            />
+            android:inputType="textPassword" />
 
         <EditText
             android:id="@+id/etFname"
@@ -69,9 +65,7 @@
             android:layout_marginTop="32dp"
             android:ems="10"
             android:hint="@string/first_name"
-            android:inputType="textPersonName"
-            />
-
+            android:inputType="textPersonName"/>
 
         <EditText
             android:id="@+id/etLname"
@@ -81,9 +75,7 @@
             android:layout_marginTop="32dp"
             android:ems="10"
             android:hint="@string/last_name"
-            android:inputType="textPersonName"
-            />
-
+            android:inputType="textPersonName" />
 
     </LinearLayout>
 
@@ -95,16 +87,13 @@
         android:orientation="vertical"
         android:gravity="bottom">
 
-
         <Button
             android:id="@+id/btnReg2"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FFEB3B"
-            android:text="@string/register"
-            />
+            android:text="@string/register" />
     </LinearLayout>
-
 
 </android.support.v7.widget.LinearLayoutCompat>

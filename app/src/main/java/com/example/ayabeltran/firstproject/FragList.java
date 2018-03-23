@@ -1,6 +1,5 @@
 package com.example.ayabeltran.firstproject;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,13 +47,6 @@ public class FragList extends Fragment {
 
     boolean isfetching = false;
 
-
-//    dbhelper mydb;
-//    SQLiteDatabase sqLiteDatabase;
-//    Cursor pulled;
-
-
-
     public FragList() {
         // Required empty public constructor
     }
@@ -69,15 +61,10 @@ public class FragList extends Fragment {
         progressBar = v.findViewById(R.id.progress);
         progressBar2 = v.findViewById(R.id.progress2);
 
-
         // adapter
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLayoutManager);
-
-//        mydb = new dbhelper(getActivity());
-//        sqLiteDatabase = mydb.getReadableDatabase();
-//        refreshList();
 
         getDataFromServer();
         loadData();
@@ -142,7 +129,6 @@ public class FragList extends Fragment {
 
                     rowCount = mGetAllData.size();
                 }
-
             }
 
             @Override
@@ -227,7 +213,6 @@ public class FragList extends Fragment {
 
                             if(isfetching==true){
 
-
                             }
                             else{
                                 pageNumber++;
@@ -235,65 +220,12 @@ public class FragList extends Fragment {
                             }
                         }
                     }, 3000);
-
                 }
             }
 
         });
     }
-//private void displayimg(){
-//
-//}
-//
-//    public Cursor pulledItems(SQLiteDatabase db) {
-//        String pull = "select * from imgTable order by " + dbhelper.imgID + " desc limit 5 offset " + (totalItems);
-//        Log.d("pull", pull);
-//        Cursor cursor = db.rawQuery(pull, null);
-//        return cursor;
-//    }
 
-//    private ArrayList<ImgRepo> convertCursorToListPlace(Cursor cursor) {
-//        ArrayList<ImgRepo> places = new ArrayList<>();
-
-//        if (cursor.moveToFirst()) {
-//            do {
-//                int id;
-//                String name, des;
-//                byte[] photo;
-//
-//                id = cursor.getInt(cursor.getColumnIndex("id"));
-//                photo = cursor.getBlob(cursor.getColumnIndex("photo"));
-//                name = cursor.getString(cursor.getColumnIndex("name"));
-//                des = cursor.getString(cursor.getColumnIndex("des"));
-//
-//                ImgRepo place = new Place(id, photo, name, des);
-//                places.add(place);
-//            }
-//            while (cursor.moveToNext());
-//
-//        }
-//
-//        return places;
-    //}
-
-//    private void refreshList() {
-//        Cursor cursor = getItemsFromDB();
-//        populateList(cursor);
-//
-//    }
-
-//    private Cursor getItemsFromDB() {
-//        return mydb.itemslisted(sqLiteDatabase);
-//    }
-
-    //    private void populateList(Cursor cursor) {
-//        places = convertCursorToListPlace(cursor);
-//
-//        recyclerAdapter = new RecyclerAdapter(places, getContext());
-//
-//        recyclerView.setAdapter(recyclerAdapter);
-//    }
-//
     private void fetchData() {
 
         isfetching =true;
@@ -330,47 +262,6 @@ public class FragList extends Fragment {
             }
         });
 
-
-//        if (pulled.moveToFirst()) {
-//            do {
-//                int id;
-//                String name, des;
-//                byte[] photo;
-//
-//                id = pulled.getInt(pulled.getColumnIndex("id"));
-//                photo = pulled.getBlob(pulled.getColumnIndex("photo"));
-//                name = pulled.getString(pulled.getColumnIndex("name"));
-//                des = pulled.getString(pulled.getColumnIndex("des"));
-//
-//                ImgRepo places = new ImgRepo(id, photo, name, des);
-//                recyclerAdapter.getPlaces().add(places);
-//
-//            }
-//            while (pulled.moveToNext());
-//
-//
-//            String count = String.valueOf(totalItems);
-//            Toast.makeText(getActivity(), count, Toast.LENGTH_SHORT).show();
-//        }
-
-//        progressBar.setVisibility(View.VISIBLE);
-//        Handler handler = new Handler();
-//        handler.postDelayed(new Runnable() {
-
-//            @Override
-//            public void run() {
-////                for (int i = 0; i < 3; i++) {
-//
-////                recyclerAdapter.notifyDataSetChanged();
-//                fetchData();
-//                progressBar.setVisibility(View.GONE);
-//
-////                }
-//
-//            }
-
-//
-//        },0);
     }
 
 

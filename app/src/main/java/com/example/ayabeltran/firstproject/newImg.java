@@ -32,8 +32,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class newImg extends AppCompatActivity {
 
-    dbhelper mydb;
-
     EditText etnewimgname, etdesc;
     ImageView btnimg;
     Button btnaddimg;
@@ -48,8 +46,6 @@ public class newImg extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_img);
-
-        mydb = new dbhelper(this);
 
         etnewimgname = findViewById(R.id.etNewimgname);
         etdesc = findViewById(R.id.etDesc);

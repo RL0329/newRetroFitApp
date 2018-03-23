@@ -47,7 +47,6 @@ public class GridAdapter extends RecyclerView.Adapter <GridAdapter.MyViewHolder>
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView name;
-        TextView des;
         ImageView photo;
         ImgRepo selectedPlace;
 
@@ -76,21 +75,15 @@ public class GridAdapter extends RecyclerView.Adapter <GridAdapter.MyViewHolder>
         //        getting the original photo from the list
         String originalPhoto = places.get(position).getImgstring();
 
-//        converting the photo bytes to usable image
-//        Bitmap decodedPhoto = BitmapFactory.decodeByteArray(originalPhoto, 0, originalPhoto.length);
-
+        //        converting the photo bytes to usable image
         final String pureBase64Encoded = originalPhoto.substring(originalPhoto.indexOf(",")  + 1);
         final byte[] decodedBytes = android.util.Base64.decode(pureBase64Encoded, android.util.Base64.DEFAULT);
 
 
-//        holder.photo.setImageBitmap(decodedBytes);
         holder.name.setText(places.get(position).getImgname());
-//        holder.des.setText(places.get(position).getDesc());
         holder.selectedPlace = places.get(position);
         Glide.with(context).load(decodedBytes).into(holder.photo);
-//        Toast.makeText(context, places.get(position).getPhoto().toString(), Toast.LENGTH_SHORT).show();
     }
-
 
     @Override
     public int getItemCount() {

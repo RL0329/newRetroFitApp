@@ -9,7 +9,6 @@
     tools:context="com.example.ayabeltran.firstproject.ListDisplay"
     android:orientation="horizontal">
 
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,7 +21,6 @@
             android:layout_marginTop="8dp"
             android:scaleType="fitXY"
             app:srcCompat="@mipmap/ic_launcher" />
-
 
     </LinearLayout>
 
@@ -38,7 +36,6 @@
 
             android:layout_marginTop="8dp"
             android:text="TextView"/>
-        <!--android:layout_marginStart="30dp"-->
 
         <TextView
             android:id="@+id/textdetails"

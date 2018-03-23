@@ -41,8 +41,7 @@
                 android:ems="10"
                 android:hint="@string/name"
                 android:inputType="textPersonName"
-                android:textAlignment="center"
-                />
+                android:textAlignment="center" />
 
             <EditText
                 android:id="@+id/etDesc"
@@ -56,8 +55,7 @@
                 android:inputType="textMultiLine"
                 android:selectAllOnFocus="false"
                 android:singleLine="false"
-                android:textAlignment="center"
-                />
+                android:textAlignment="center" />
 
         </LinearLayout>
     </ScrollView>
@@ -66,8 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="bottom"
-        >
+        android:gravity="bottom">
 
 
         <Button
@@ -83,11 +80,5 @@
             android:gravity="center"/>
 
     </LinearLayout>
-
-
-
-
-
-
 
 </android.support.v7.widget.LinearLayoutCompat>
