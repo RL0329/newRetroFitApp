@@ -4,6 +4,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,7 +33,6 @@ public class FragList extends Fragment {
     RecyclerView recyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     SwipeRefreshLayout mswipeRefreshLayout;
-    ArrayList<Integer> places = new ArrayList();
     dbhelper mydb;
     SQLiteDatabase sqLiteDatabase;
     //    Cursor pulled;
@@ -41,11 +41,12 @@ public class FragList extends Fragment {
     RecyclerAdapter recyclerAdapter;
 
     Boolean isScrolling = false;
-    public static int totalItems;
+//    public static int totalItems;
     int rowCount;
-    int listSize;
+    public int pageNumber =1;
+    boolean isfetching = false;
 
-    public static int pageNumber =1;
+
 
     public FragList() {
         // Required empty public constructor
@@ -73,6 +74,7 @@ public class FragList extends Fragment {
 //        refreshList();
 
 
+
         getDataFromServer();
         loadData();
         EndlessScroll();
@@ -83,9 +85,7 @@ public class FragList extends Fragment {
             @Override
             public void onRefresh() {
 
-
-               places.clear();
-               listSize = places.size();
+//               recyclerAdapter.clear();
 
 
                 loadData();
@@ -159,6 +159,7 @@ public class FragList extends Fragment {
     }
 
     private void loadData() {
+        pageNumber=1;
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -181,12 +182,11 @@ public class FragList extends Fragment {
                 recyclerView.setAdapter(recyclerAdapter);
 
 
-                listSize=repos.size();
+
 //                int count = repos.size();
 
 //                for(int i=0;i<count;i++){
 //                  places.add(i);
-//                  listSize = places.size();
 //                }
             }
 
@@ -213,22 +213,19 @@ public class FragList extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                totalItems = mLayoutManager.getItemCount();
-//                pulled = pulledItems(sqLiteDatabase);
-
-
-
-
+                int totalItems = mLayoutManager.getItemCount();
                 int itemsOnScreen = mLayoutManager.getChildCount();
                 int lastVisItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
                 System.out.println("row count: " + rowCount);
-                System.out.println("list size: " + listSize);
                 System.out.println("last visible item: " + lastVisItem);
                 System.out.println("items on screen: " + itemsOnScreen);
                 System.out.println("total items:" + totalItems);
+                System.out.println("recycler count:" + recyclerAdapter.getItemCount());
+                System.out.println("page no:" + pageNumber);
 
-                if (isScrolling && (lastVisItem + 2) > totalItems && (totalItems < rowCount)) {
+
+                if (isScrolling && (lastVisItem + 1) == totalItems && (totalItems < rowCount)) {
 
                     progressBar.setVisibility(View.VISIBLE);
                     Handler handler = new Handler();
@@ -236,20 +233,26 @@ public class FragList extends Fragment {
 
                         @Override
                         public void run() {
-                            for (int i = 0; i < 3; i++) {
 
-//                            recyclerAdapter.notifyDataSetChanged();
-                                progressBar.setVisibility(View.GONE);
-                                recyclerAdapter.notifyDataSetChanged();
-                                isScrolling = false;
+                            progressBar.setVisibility(View.GONE);
+                            recyclerAdapter.notifyDataSetChanged();
+                            isScrolling = false;
+
+                            if(isfetching==true){
+
+                                Toast.makeText(getActivity(),"fetching true",Toast.LENGTH_SHORT).show();
                             }
+                            else{
+                                Toast.makeText(getActivity(),"fetching false",Toast.LENGTH_SHORT).show();
+
+
+                                pageNumber++;
+                                fetchData();
+                            }
+
 
                         }
                     }, 3000);
-
-                    pageNumber++;
-                    fetchData();
-//                    listSize = places.size();
 
                 }
             }
@@ -311,6 +314,9 @@ public class FragList extends Fragment {
 //
     private void fetchData() {
 
+        isfetching =true;
+        Toast.makeText(getActivity(),"goats",Toast.LENGTH_SHORT).show();
+
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         Retrofit.Builder builder = new Retrofit.Builder()
@@ -321,6 +327,7 @@ public class FragList extends Fragment {
 
         gitHubClient client = retrofit.create(gitHubClient.class);
         Call<java.util.ArrayList<ImgRepo>>call = client.fetchNewData("id", "desc", 5,pageNumber);
+//        Call<java.util.ArrayList<ImgRepo>>call = client.fetchNewData("comments");
         call.enqueue(new Callback<java.util.ArrayList<ImgRepo>> () {
             @Override
             public void onResponse (Call<java.util.ArrayList<ImgRepo>> call, Response<java.util.ArrayList<ImgRepo>>response){
@@ -335,8 +342,8 @@ public class FragList extends Fragment {
 
 //                recyclerAdapter.notifyDataSetChanged();
 
+                isfetching = false;
 
-                listSize=newdata.size();
 
 //                int count = newdata.size();
 //

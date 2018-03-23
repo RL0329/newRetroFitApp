@@ -44,8 +44,8 @@ public interface gitHubClient {
     @GET("comments")
     Call<java.util.ArrayList<ImgRepo>>fetchNewData (@Query("_sort") String id,@Query("_order")String desc, @Query("_limit") int limit, @Query("_page") int pageNumber);
 
-//    @GET("comments?_sort=id&_order=desc&_limit=5&_page={pageNumber}")
-//    Call<java.util.ArrayList<ImgRepo>>fetchNewData (@Path("pageNumber") int pageNumber);
+//    @GET("{comments}?_sort=id&_order=desc&_limit=5}")
+//    Call<java.util.ArrayList<ImgRepo>>fetchNewData (@Path("comments") String comments);
 
 
     @GET("{comments}?_sort=id&_order=desc")
