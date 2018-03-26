@@ -14,7 +14,7 @@ import retrofit2.http.Query;
 public interface gitHubClient {
 
 
-    //                          create use
+    //                          create user
     @POST("posts")
     Call<GitHubRepo>
     adduser(@Body GitHubRepo posts);
