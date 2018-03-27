@@ -61,6 +61,11 @@ public interface gitHubClient {
     @GET("{mediaItems}")
     Call<java.util.ArrayList<ImgRepo>> allData (@Path("mediaItems") String comments);
 
+    @GET("comments/")
+    Call<java.util.ArrayList<ImgRepo>>fetchSingleImg (@Query("idNo") int idNo);
+
+
+
 
 
 }
