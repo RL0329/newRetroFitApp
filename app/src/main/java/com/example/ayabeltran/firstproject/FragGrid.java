@@ -117,7 +117,7 @@ public class FragGrid extends Fragment {
         Retrofit retrofit = builder.client(httpClient.build()).build();
 
         gitHubClient client = retrofit.create(gitHubClient.class);
-        Call<java.util.ArrayList<ImgRepo>> call = client.allData("comments");
+        Call<java.util.ArrayList<ImgRepo>> call = client.allData("mediaItems");
 
 
         call.enqueue(new Callback<java.util.ArrayList<ImgRepo>>() {
@@ -157,7 +157,7 @@ public class FragGrid extends Fragment {
         Retrofit retrofit = builder.client(httpClient.build()).build();
 
         gitHubClient client = retrofit.create(gitHubClient.class);
-        Call<java.util.ArrayList<ImgRepo>> call = client.displaygridimg("comments");
+        Call<java.util.ArrayList<ImgRepo>> call = client.displaygridimg("mediaItems");
 
         call.enqueue(new Callback<java.util.ArrayList<ImgRepo>>() {
             @Override

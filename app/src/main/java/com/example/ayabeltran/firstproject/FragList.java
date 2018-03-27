@@ -113,7 +113,7 @@ public class FragList extends Fragment {
         Retrofit retrofit = builder.client(httpClient.build()).build();
 
         gitHubClient client = retrofit.create(gitHubClient.class);
-        Call<java.util.ArrayList<ImgRepo>> call = client.allData("comments");
+        Call<java.util.ArrayList<ImgRepo>> call = client.allData("mediaItems");
 
 
         call.enqueue(new Callback<java.util.ArrayList<ImgRepo>>() {
@@ -153,7 +153,7 @@ public class FragList extends Fragment {
         Retrofit retrofit = builder.client(httpClient.build()).build();
 
         gitHubClient client = retrofit.create(gitHubClient.class);
-        Call<java.util.ArrayList<ImgRepo>> call = client.displayimg("comments");
+        Call<java.util.ArrayList<ImgRepo>> call = client.displayimg("mediaItems");
 
         call.enqueue(new Callback<java.util.ArrayList<ImgRepo>>() {
             @Override

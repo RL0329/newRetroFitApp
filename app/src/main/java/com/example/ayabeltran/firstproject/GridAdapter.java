@@ -73,16 +73,16 @@ public class GridAdapter extends RecyclerView.Adapter <GridAdapter.MyViewHolder>
     public void onBindViewHolder(GridAdapter.MyViewHolder holder, int position) {
 
         //        getting the original photo from the list
-        String originalPhoto = places.get(position).getImgstring();
+//        String originalPhoto = places.get(position).getImgstring();
 
         //        converting the photo bytes to usable image
-        final String pureBase64Encoded = originalPhoto.substring(originalPhoto.indexOf(",")  + 1);
-        final byte[] decodedBytes = android.util.Base64.decode(pureBase64Encoded, android.util.Base64.DEFAULT);
+//        final String pureBase64Encoded = originalPhoto.substring(originalPhoto.indexOf(",")  + 1);
+//        final byte[] decodedBytes = android.util.Base64.decode(pureBase64Encoded, android.util.Base64.DEFAULT);
 
 
         holder.name.setText(places.get(position).getImgname());
         holder.selectedPlace = places.get(position);
-        Glide.with(context).load(decodedBytes).into(holder.photo);
+//        Glide.with(context).load(decodedBytes).into(holder.photo);
     }
 
     @Override
