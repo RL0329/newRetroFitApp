@@ -19,9 +19,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -41,6 +46,16 @@ public class newImg extends AppCompatActivity {
     Bitmap camImg;
     Bitmap bitmap;
 
+    String imgUrl;
+
+    public static String[] mediaUrlList = {
+            "https://www.everythingcarers.org.au/media/1982/sample.jpg",
+            "https://orig00.deviantart.net/fa32/f/2009/346/5/b/8bit_mario_kart_by_killdoser666.jpg",
+            "https://ih1.redbubble.net/image.130551384.4550/flat,550x550,075,f.u1.jpg",
+            "https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/2T0t-6V/game-over-8bit-retro-4k-a-4k-game-over-screen-8-bit-retro-style_rmhi2u_e__S0001.jpg",
+            "https://cdn.makeuseof.com/wp-content/uploads/2012/01/8bit_mushroom_intro.jpg"
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,41 +68,43 @@ public class newImg extends AppCompatActivity {
         btnaddimg = findViewById(R.id.btnAddimg);
 
 
-        btnimg.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
 
-                        AlertDialog.Builder mbuilder = new AlertDialog.Builder(newImg.this);
-                        View mview = getLayoutInflater().inflate(R.layout.dialog_add_image, null);
-                        Button mbtnUseCam = mview.findViewById(R.id.btnUseCam);
-                        Button mbtnUseGal = mview.findViewById(R.id.btnUseGal);
-                        mbuilder.setView(mview);
-                        final AlertDialog dialog = mbuilder.create();
 
-                        mbtnUseCam.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                startActivityForResult(i, CAPTURE_IMAGE);
-                                dialog.dismiss();
-                            }
-                        });
-
-                        mbtnUseGal.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ActivityCompat.requestPermissions(newImg.this,
-                                new String [] {Manifest.permission.READ_EXTERNAL_STORAGE},
-                                SELECT_IMAGE);
-                                dialog.dismiss();
-                            }
-                        });
-                        dialog.show();
-
-                    }
-                }
-        );
+//        btnimg.setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                        AlertDialog.Builder mbuilder = new AlertDialog.Builder(newImg.this);
+//                        View mview = getLayoutInflater().inflate(R.layout.dialog_add_image, null);
+//                        Button mbtnUseCam = mview.findViewById(R.id.btnUseCam);
+//                        Button mbtnUseGal = mview.findViewById(R.id.btnUseGal);
+//                        mbuilder.setView(mview);
+//                        final AlertDialog dialog = mbuilder.create();
+//
+//                        mbtnUseCam.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                                startActivityForResult(i, CAPTURE_IMAGE);
+//                                dialog.dismiss();
+//                            }
+//                        });
+//
+//                        mbtnUseGal.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                ActivityCompat.requestPermissions(newImg.this,
+//                                new String [] {Manifest.permission.READ_EXTERNAL_STORAGE},
+//                                SELECT_IMAGE);
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                        dialog.show();
+//
+//                    }
+//                }
+//        );
         btnaddimg.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -96,6 +113,29 @@ public class newImg extends AppCompatActivity {
                     }
                 }
         );
+
+        try {
+            getImg();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void getImg() throws MalformedURLException {
+
+        Picasso.get()
+                .load(getRandomUrl())
+                .placeholder(R.drawable.ic_launcher_background)
+                .into(btnimg);
+        }
+
+    public String getRandomUrl() throws MalformedURLException {
+
+        int rnd = new Random().nextInt(mediaUrlList.length);
+        imgUrl = mediaUrlList[rnd];
+        return imgUrl;
+
     }
 
 
@@ -161,13 +201,12 @@ public class newImg extends AppCompatActivity {
             return;
         }
 
-        Toast.makeText(newImg.this, imageToString(bitmap), Toast.LENGTH_SHORT).show();
 
         ImgRepo newimgDetails = new ImgRepo(
 
                 name,
                 des,
-                imageToString(bitmap)
+                imgUrl
         );
 
         addImgRequest(newimgDetails);
@@ -216,11 +255,11 @@ public class newImg extends AppCompatActivity {
 
 
 
-    public static byte[] getimagebyte (ImageView imageView){
-        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
-        byte [] bytearray = stream.toByteArray();
-        return bytearray;
-    }
+//    public static byte[] getimagebyte (ImageView imageView){
+//        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+//        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+//        byte [] bytearray = stream.toByteArray();
+//        return bytearray;
+//    }
 }

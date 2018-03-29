@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
+
 import java.util.*;
 import java.util.Base64;
 
@@ -73,7 +75,7 @@ public class GridAdapter extends RecyclerView.Adapter <GridAdapter.MyViewHolder>
     public void onBindViewHolder(GridAdapter.MyViewHolder holder, int position) {
 
         //        getting the original photo from the list
-//        String originalPhoto = places.get(position).getImgstring();
+        String originalPhoto = places.get(position).getImgstring();
 
         //        converting the photo bytes to usable image
 //        final String pureBase64Encoded = originalPhoto.substring(originalPhoto.indexOf(",")  + 1);
@@ -83,6 +85,11 @@ public class GridAdapter extends RecyclerView.Adapter <GridAdapter.MyViewHolder>
         holder.name.setText(places.get(position).getImgname());
         holder.selectedPlace = places.get(position);
 //        Glide.with(context).load(decodedBytes).into(holder.photo);
+
+        Picasso.get()
+                .load(originalPhoto)
+                .placeholder(R.drawable.ic_launcher_background)
+                .into(holder.photo);
     }
 
     @Override

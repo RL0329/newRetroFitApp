@@ -70,7 +70,7 @@ public class FragGrid extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        getDataFromServer();
+
         loadData();
         EndlessScroll();
 
@@ -146,7 +146,10 @@ public class FragGrid extends Fragment {
 
     private void loadData() {
 
+
         gridPageNumber = 1;
+
+        getDataFromServer();
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -223,7 +226,7 @@ public class FragGrid extends Fragment {
                             else{
                                 Toast.makeText(getActivity(),"fetching false",Toast.LENGTH_SHORT).show();
 
-                                gridPageNumber++;
+
                                 fetchData();
                             }
                         }
@@ -238,6 +241,8 @@ public class FragGrid extends Fragment {
     private void fetchData() {
 
         isfetching =true;
+
+        gridPageNumber++;
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 

@@ -66,7 +66,7 @@ public class FragList extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        getDataFromServer();
+
         loadData();
         EndlessScroll();
 
@@ -142,6 +142,8 @@ public class FragList extends Fragment {
 
     private void loadData() {
 
+        getDataFromServer();
+
         pageNumber=1;
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
@@ -215,6 +217,7 @@ public class FragList extends Fragment {
 
                             }
                             else{
+
                                 pageNumber++;
                                 fetchData();
                             }
@@ -229,6 +232,8 @@ public class FragList extends Fragment {
     private void fetchData() {
 
         isfetching =true;
+
+
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -263,7 +268,5 @@ public class FragList extends Fragment {
         });
 
     }
-
-
 }
 

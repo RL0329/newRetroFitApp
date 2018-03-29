@@ -22,10 +22,11 @@ public class GridViewLayout extends AppCompatActivity {
 
             Bundle extra = getIntent().getExtras();
             String  Key = extra.getString("Key");
-            byte[]  Key3 = extra.getByteArray("Key3");
+            String  Key3 = extra.getString("key3");
+//            byte[]  Key3 = extra.getByteArray("Key3");
 
             name.setText(Key);
-            Bitmap bm = BitmapFactory.decodeByteArray(Key3, 0, Key3.length);
-            image.setImageBitmap(bm);
+//            Bitmap bm = BitmapFactory.decodeByteArray(Key3, 0, Key3.length);
+//            image.setImageBitmap(bm);
         }
 }

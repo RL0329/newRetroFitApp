@@ -29,16 +29,6 @@ public class create_user extends AppCompatActivity {
 
     public static final String baseURL = "http://10.20.110.30:3000";
 
-    public static String image_url_1 = "http://sample-images.com/wp-content/uploads/2014/01/DSC06564.jpg";
-    public static String image_url_2 = "http://sample-images.com/wp-content/uploads/2014/01/DSC06562.jpg";
-    public static String image_url_3 = "http://sample-images.com/wp-content/uploads/2014/01/DSC06556.jpg";
-    public static String image_url_4 = "http://sample-images.com/wp-content/uploads/2014/01/DSC06571.jpg";
-    public static String image_url_5 = "http://sample-images.com/wp-content/uploads/2014/01/DSC07144.jpg";
-
-
-
-
-
 
 
     @Override

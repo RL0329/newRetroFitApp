@@ -34,10 +34,10 @@ public class ListDisplay extends AppCompatActivity {
 
 //        Bitmap bm = BitmapFactory.decodeByteArray(Key3, 0, Key3.length);
 //        image.setImageBitmap(bm);
-        final String pureBase64Encoded = Key3.substring(Key3.indexOf(",")  + 1);
-        final byte[] decodedBytes = Base64.decode(pureBase64Encoded, Base64.DEFAULT);
-
-
-        image.setImageBitmap(decodedBytes);
+//        final String pureBase64Encoded = Key3.substring(Key3.indexOf(",")  + 1);
+//        final byte[] decodedBytes = Base64.decode(pureBase64Encoded, Base64.DEFAULT);
+//
+//
+//        image.setImageBitmap(decodedBytes);
     }
 }
