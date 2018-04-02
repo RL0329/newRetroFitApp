@@ -65,7 +65,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.MyVie
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent preview = new Intent(context, ListDisplay.class);
+                    Intent preview = new Intent(context, Download.class);
                     preview.putExtra("Key", selectedPlace.getImgname());
                     preview.putExtra("Key2", selectedPlace.getDesc());
                     preview.putExtra("Key3", selectedPlace.getImgstring());

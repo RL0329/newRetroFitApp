@@ -49,11 +49,12 @@ public class newImg extends AppCompatActivity {
     String imgUrl;
 
     public static String[] mediaUrlList = {
-            "https://www.everythingcarers.org.au/media/1982/sample.jpg",
-            "https://orig00.deviantart.net/fa32/f/2009/346/5/b/8bit_mario_kart_by_killdoser666.jpg",
-            "https://ih1.redbubble.net/image.130551384.4550/flat,550x550,075,f.u1.jpg",
-            "https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/2T0t-6V/game-over-8bit-retro-4k-a-4k-game-over-screen-8-bit-retro-style_rmhi2u_e__S0001.jpg",
-            "https://cdn.makeuseof.com/wp-content/uploads/2012/01/8bit_mushroom_intro.jpg"
+//            "https://www.everythingcarers.org.au/media/1982/sample.jpg",
+//            "https://orig00.deviantart.net/fa32/f/2009/346/5/b/8bit_mario_kart_by_killdoser666.jpg",
+//            "https://ih1.redbubble.net/image.130551384.4550/flat,550x550,075,f.u1.jpg",
+//            "https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/2T0t-6V/game-over-8bit-retro-4k-a-4k-game-over-screen-8-bit-retro-style_rmhi2u_e__S0001.jpg",
+//            "https://cdn.makeuseof.com/wp-content/uploads/2012/01/8bit_mushroom_intro.jpg"
+            "http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"
     };
 
 
