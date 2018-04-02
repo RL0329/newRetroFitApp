@@ -48,8 +48,8 @@ public class FragList extends Fragment {
 
     boolean isfetching = false;
 
-    int totalItems;
-    int lastVisItem;
+//    int totalItems;
+//    int lastVisItem;
 
     public FragList() {
         // Required empty public constructor
@@ -194,8 +194,8 @@ public class FragList extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                totalItems = mLayoutManager.getItemCount();
-                lastVisItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+              int totalItems = mLayoutManager.getItemCount();
+              int lastVisItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
                 System.out.println("row count: " + rowCount);
                 System.out.println("last visible item: " + lastVisItem);
@@ -217,21 +217,22 @@ public class FragList extends Fragment {
                             recyclerAdapter.notifyDataSetChanged();
                             isScrolling = false;
 
-                            if(isfetching!=true){
+                            if(isfetching==true){
 
-                                pageNumber++;
-                                fetchData();
-                                Toast.makeText(getActivity(), "is fetching", Toast.LENGTH_SHORT).show();
+
+                                Toast.makeText(getActivity(), "is fetching true", Toast.LENGTH_SHORT).show();
 
 
                             }
                             else{
+                                Toast.makeText(getActivity(), "is fetching false", Toast.LENGTH_SHORT).show();
 
-
-
+                                pageNumber++;
+                                fetchData();
                             }
                         }
                     }, 3000);
+                    isfetching =false;
                 }
             }
 
@@ -265,7 +266,7 @@ public class FragList extends Fragment {
 
                 recyclerAdapter.getItemCount();
 
-                isfetching = false;
+//                isfetching = false;
 
             }
 
