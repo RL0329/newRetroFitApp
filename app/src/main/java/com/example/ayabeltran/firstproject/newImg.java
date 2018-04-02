@@ -125,6 +125,8 @@ public class newImg extends AppCompatActivity {
 
     private void getImg() throws MalformedURLException {
 
+
+
         Picasso.get()
                 .load(getRandomUrl())
                 .placeholder(R.drawable.ic_launcher_background)
