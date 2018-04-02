@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,9 @@ public class FragList extends Fragment {
     int pageNumber =1;
 
     boolean isfetching = false;
+
+    int totalItems;
+    int lastVisItem;
 
     public FragList() {
         // Required empty public constructor
@@ -190,8 +194,8 @@ public class FragList extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                int totalItems = mLayoutManager.getItemCount();
-                int lastVisItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                totalItems = mLayoutManager.getItemCount();
+                lastVisItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
                 System.out.println("row count: " + rowCount);
                 System.out.println("last visible item: " + lastVisItem);
@@ -213,13 +217,18 @@ public class FragList extends Fragment {
                             recyclerAdapter.notifyDataSetChanged();
                             isScrolling = false;
 
-                            if(isfetching==true){
+                            if(isfetching!=true){
+
+                                pageNumber++;
+                                fetchData();
+                                Toast.makeText(getActivity(), "is fetching", Toast.LENGTH_SHORT).show();
+
 
                             }
                             else{
 
-                                pageNumber++;
-                                fetchData();
+
+
                             }
                         }
                     }, 3000);
