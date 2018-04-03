@@ -55,38 +55,48 @@ public class Download extends AppCompatActivity {
 //        byte[]  Key3 = extra.getByteArray("Key3");
 
 
-        name.setText(Key);
-        description.setText(Key2);
-        Picasso.get()
-                .load(Key3)
-                .placeholder(R.drawable.ic_launcher_background)
-                .into(image);
+        if(Key3.contains(".jpg")){
+
+            name.setText(Key);
+            description.setText(Key2);
+            Picasso.get()
+                    .load(Key3)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .into(image);
 
 
-        btndl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            btndl.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                AlertDialog dialog = new SpotsDialog(Download.this);
-                dialog.show();
-                dialog.setMessage("Downloading...");
+                    AlertDialog dialog = new SpotsDialog(Download.this);
+                    dialog.show();
+                    dialog.setMessage("Downloading...");
 
-                String fileName = Key+".jpg";
+                    String fileName = Key+".jpg";
 
-                Picasso.get()
-                        .load(Key3)
-                        .into(new saveImageHelper(getBaseContext(),
-                                dialog,
-                                getApplicationContext().getContentResolver(),
-                                fileName,Key2));
+                    Picasso.get()
+                            .load(Key3)
+                            .into(new saveImageHelper(getBaseContext(),
+                                    dialog,
+                                    getApplicationContext().getContentResolver(),
+                                    fileName,Key2));
 
-                Toast.makeText(Download.this, "Image downloaded", Toast.LENGTH_SHORT).show();
-                finish();
+                    Toast.makeText(Download.this, "Image downloaded", Toast.LENGTH_SHORT).show();
+                    finish();
 
 
 
-            }
-        });
+                }
+            });
+
+        }
+
+        if(Key3.contains(".mp4")){
+
+
+        }
+
 
     }
 
