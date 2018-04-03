@@ -6,7 +6,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -26,6 +28,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Random;
 
 import okhttp3.OkHttpClient;
@@ -42,19 +45,19 @@ public class newImg extends AppCompatActivity {
     Button btnaddimg;
     private static int SELECT_IMAGE = 1;
     private static int CAPTURE_IMAGE = 2 ;
-    Uri selectedimage;
-    Bitmap camImg;
-    Bitmap bitmap;
+//    Uri selectedimage;
+//    Bitmap camImg;
+//    Bitmap bitmap;
 
     String imgUrl;
 
     public static String[] mediaUrlList = {
-//            "https://www.everythingcarers.org.au/media/1982/sample.jpg",
-//            "https://orig00.deviantart.net/fa32/f/2009/346/5/b/8bit_mario_kart_by_killdoser666.jpg",
-//            "https://ih1.redbubble.net/image.130551384.4550/flat,550x550,075,f.u1.jpg",
-//            "https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/2T0t-6V/game-over-8bit-retro-4k-a-4k-game-over-screen-8-bit-retro-style_rmhi2u_e__S0001.jpg",
-//            "https://cdn.makeuseof.com/wp-content/uploads/2012/01/8bit_mushroom_intro.jpg"
-            "http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"
+            "https://www.everythingcarers.org.au/media/1982/sample.jpg",
+            "https://orig00.deviantart.net/fa32/f/2009/346/5/b/8bit_mario_kart_by_killdoser666.jpg",
+            "https://ih1.redbubble.net/image.130551384.4550/flat,550x550,075,f.u1.jpg",
+            "https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/2T0t-6V/game-over-8bit-retro-4k-a-4k-game-over-screen-8-bit-retro-style_rmhi2u_e__S0001.jpg",
+            "https://cdn.makeuseof.com/wp-content/uploads/2012/01/8bit_mushroom_intro.jpg"
+//            "http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"
     };
 
 
@@ -119,18 +122,29 @@ public class newImg extends AppCompatActivity {
             getImg();
         } catch (MalformedURLException e) {
             e.printStackTrace();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
         }
 
     }
 
-    private void getImg() throws MalformedURLException {
+    private void getImg() throws Throwable {
 
 
+        String randURL = getRandomUrl();
 
-        Picasso.get()
-                .load(getRandomUrl())
-                .placeholder(R.drawable.ic_launcher_background)
-                .into(btnimg);
+        if (randURL.contains(".jpg")){
+            Picasso.get()
+                    .load(randURL)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .into(btnimg);
+
+        }
+        if (randURL.contains(".mp4")){
+
+
+        }
+
         }
 
     public String getRandomUrl() throws MalformedURLException {
@@ -142,51 +156,51 @@ public class newImg extends AppCompatActivity {
     }
 
 
-    private String imageToString (Bitmap bitmap){
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-        byte [] imgBytes = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(imgBytes,Base64.DEFAULT);
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == SELECT_IMAGE){
-            if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/");
-                startActivityForResult(intent, SELECT_IMAGE);
-            }
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SELECT_IMAGE && resultCode == RESULT_OK && data != null) {
-            selectedimage = data.getData();
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(selectedimage);
-                bitmap = BitmapFactory.decodeStream(inputStream);
-                btnimg.setImageBitmap(bitmap);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Hello", Toast.LENGTH_SHORT).show();
-            }
-        }
-        if (requestCode == CAPTURE_IMAGE && resultCode == RESULT_OK && data != null) {
-            camImg =(Bitmap) data.getExtras().get("data");
-            try {
-                btnimg.setImageBitmap(camImg);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Hello", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+//    private String imageToString (Bitmap bitmap){
+//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+//        byte [] imgBytes = byteArrayOutputStream.toByteArray();
+//        return Base64.encodeToString(imgBytes,Base64.DEFAULT);
+//    }
+//
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        if(requestCode == SELECT_IMAGE){
+//            if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+//                Intent intent = new Intent(Intent.ACTION_PICK);
+//                intent.setType("image/");
+//                startActivityForResult(intent, SELECT_IMAGE);
+//            }
+//        }
+//    }
+//
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == SELECT_IMAGE && resultCode == RESULT_OK && data != null) {
+//            selectedimage = data.getData();
+//            try {
+//                InputStream inputStream = getContentResolver().openInputStream(selectedimage);
+//                bitmap = BitmapFactory.decodeStream(inputStream);
+//                btnimg.setImageBitmap(bitmap);
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                Toast.makeText(getApplicationContext(), "Hello", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//        if (requestCode == CAPTURE_IMAGE && resultCode == RESULT_OK && data != null) {
+//            camImg =(Bitmap) data.getExtras().get("data");
+//            try {
+//                btnimg.setImageBitmap(camImg);
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                Toast.makeText(getApplicationContext(), "Hello", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
 
     public void AddImage(){
         final String name = etnewimgname.getText().toString();
