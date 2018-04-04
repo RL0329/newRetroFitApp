@@ -3,6 +3,7 @@ package com.example.ayabeltran.firstproject;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -95,7 +96,17 @@ public class Download extends AppCompatActivity {
 //                                    fileName,Key2));
 
 
-                DownloadData(uri, v);
+
+
+                if (btndl.getText()== "Play"){
+
+                    Intent playVideo = new Intent(Download.this,PlayVideo.class);
+                    startActivity(playVideo);
+                }
+                else {
+                    DownloadData(uri, v);
+                }
+
 //                btndl.setText("Play");
 //
 //                    if(downloading==true){
@@ -179,6 +190,7 @@ public class Download extends AppCompatActivity {
                             if(dl_progress == 100) {
                                 progressBar.setVisibility(View.GONE);
                                 btndl.setText("Play");
+                                Toast.makeText(Download.this, "Video Downloaded", Toast.LENGTH_SHORT).show();
                             }
 
 //                            Handler handler = new Handler();
