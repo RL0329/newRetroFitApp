@@ -177,6 +177,7 @@ public class Download extends AppCompatActivity {
                             System.out.println(dl_progress);
 
                             if(dl_progress == 100) {
+                                progressBar.setVisibility(View.GONE);
                                 btndl.setText("Play");
                             }
 
