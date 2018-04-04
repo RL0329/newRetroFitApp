@@ -69,6 +69,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.MyVie
                     preview.putExtra("Key", selectedPlace.getImgname());
                     preview.putExtra("Key2", selectedPlace.getDesc());
                     preview.putExtra("Key3", selectedPlace.getImgstring());
+                    preview.putExtra("Key4",selectedPlace.getVidstring());
                     context.startActivity(preview);
                 }
             });

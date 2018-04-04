@@ -7,15 +7,17 @@ package com.example.ayabeltran.firstproject;
 public class ImgRepo {
 
     private int id;
-    private String imgname,
-            desc,
-            imgstring;
+    private String imgname;
+    private String desc;
+    private String imgstring;
+    private String vidstring;
 
 
-    public ImgRepo(String imgname, String desc, String imgstring) {
+    public ImgRepo(String imgname, String desc, String imgstring, String vidstring) {
         this.imgname = imgname;
         this.desc = desc;
         this.imgstring = imgstring;
+        this.vidstring = vidstring;
     }
 
     public int getId() {
@@ -33,4 +35,6 @@ public class ImgRepo {
     public String getImgstring() {
         return imgstring;
     }
+
+    public String getVidstring() {return vidstring;}
 }

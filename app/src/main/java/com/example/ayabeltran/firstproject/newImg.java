@@ -1,21 +1,7 @@
 package com.example.ayabeltran.firstproject;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.MediaMetadataRetriever;
-import android.net.Uri;
-import android.os.Build;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,11 +10,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
 import java.util.Random;
 
 import okhttp3.OkHttpClient;
@@ -50,7 +32,7 @@ public class newImg extends AppCompatActivity {
 //    Bitmap bitmap;
 
     String imgUrl;
-    String videoUrl;
+    String vidUrl;
 
     public static String[] imgUrlList = {
             "https://www.everythingcarers.org.au/media/1982/sample.jpg",
@@ -60,7 +42,7 @@ public class newImg extends AppCompatActivity {
             "https://cdn.makeuseof.com/wp-content/uploads/2012/01/8bit_mushroom_intro.jpg"
     };
 
-    public static String[] videoUrlList = {
+    public static String[] vidUrlList = {
             "https://www.demonuts.com/Demonuts/smallvideo.mp4",
             "http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4",
             "http://mirrors.standaloneinstaller.com/video-sample/dolbycanyon.mp4",
@@ -142,7 +124,9 @@ public class newImg extends AppCompatActivity {
     private void getImg() throws Throwable {
 
 
-        String rndImgURL = getImgUrl();
+        String rndImgURL = getImgUrl(),
+                rndVidURL = vidUrl;
+
 
             Picasso.get()
                     .load(rndImgURL)
@@ -162,9 +146,9 @@ public class newImg extends AppCompatActivity {
 
     public String getVideoUrl() throws MalformedURLException {
 
-        int rndvid = new Random().nextInt(videoUrlList.length);
-        videoUrl = videoUrlList[rndvid];
-        return videoUrl;
+        int rndvid = new Random().nextInt(vidUrlList.length);
+        vidUrl = vidUrlList[rndvid];
+        return vidUrl;
     }
 
 
@@ -237,7 +221,8 @@ public class newImg extends AppCompatActivity {
 
                 name,
                 des,
-                imgUrl
+                imgUrl,
+                vidUrl
         );
 
         addImgRequest(newimgDetails);

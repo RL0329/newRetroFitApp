@@ -1,8 +1,10 @@
 package com.example.ayabeltran.firstproject;
 
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +37,8 @@ public class Download extends AppCompatActivity {
     TextView name,
             description;
     Button btndl;
+    Uri uri;
+    boolean downloading=false;
 
 
     @Override
@@ -52,10 +56,10 @@ public class Download extends AppCompatActivity {
         final String Key = extra.getString("Key");
         final String  Key2 = extra.getString("Key2");
         final String  Key3 = extra.getString("Key3");
+        final String Key4 = extra.getString("Key4");
 //        byte[]  Key3 = extra.getByteArray("Key3");
 
-
-        if(Key3.contains(".jpg")){
+         uri = Uri.parse(Key4);
 
             name.setText(Key);
             description.setText(Key2);
@@ -73,29 +77,65 @@ public class Download extends AppCompatActivity {
                     dialog.show();
                     dialog.setMessage("Downloading...");
 
-                    String fileName = Key+".jpg";
-
-                    Picasso.get()
-                            .load(Key3)
-                            .into(new saveImageHelper(getBaseContext(),
-                                    dialog,
-                                    getApplicationContext().getContentResolver(),
-                                    fileName,Key2));
-
-                    Toast.makeText(Download.this, "Image downloaded", Toast.LENGTH_SHORT).show();
-                    finish();
+//                    String fileName = Key+".jpg";
+//
+//                    Picasso.get()
+//                            .load(Key3)
+//                            .into(new saveImageHelper(getBaseContext(),
+//                                    dialog,
+//                                    getApplicationContext().getContentResolver(),
+//                                    fileName,Key2));
 
 
+
+                    DownloadData(uri, v);
+
+                    if(downloading==true){
+                        Toast.makeText(Download.this, "DLtrue", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+//                        Toast.makeText(Download.this, "DLfalse", Toast.LENGTH_SHORT).show();
+
+                        dialog.dismiss();
+                        Toast.makeText(Download.this, "Image downloaded", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
 
                 }
             });
 
-        }
-
-        if(Key3.contains(".mp4")){
-
-
-        }
     }
+
+
+
+    private long DownloadData (Uri uri, View v) {
+        downloading=true;
+
+        long downloadReference;
+
+        // Create request for android download manager
+        DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+
+        //Setting title of request
+        request.setTitle("Data Download");
+
+        //Setting description of request
+        request.setDescription("Android Data download using DownloadManager.");
+
+        //Set the local destination for the downloaded file to a path within the application's external files directory
+        if(v.getId() == R.id.btnDL)
+            request.setDestinationInExternalFilesDir(Download.this, Environment.DIRECTORY_DOWNLOADS,"small.mp4");
+
+
+        //Enqueue download and save into referenceId
+        downloadReference = downloadManager.enqueue(request);
+
+        downloading=false;
+
+        return downloadReference;
+    }
+
+
 }
 

@@ -219,14 +219,8 @@ public class FragList extends Fragment {
 
                             if(isfetching==true){
 
-
-                                Toast.makeText(getActivity(), "is fetching true", Toast.LENGTH_SHORT).show();
-
-
                             }
                             else{
-                                Toast.makeText(getActivity(), "is fetching false", Toast.LENGTH_SHORT).show();
-
                                 pageNumber++;
                                 fetchData();
                             }
