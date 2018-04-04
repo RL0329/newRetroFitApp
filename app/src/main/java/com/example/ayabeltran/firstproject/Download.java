@@ -44,6 +44,7 @@ public class Download extends AppCompatActivity {
     Uri uri;
 //    boolean downloading = false;
     ProgressBar progressBar;
+    String Key;
 
 
     @Override
@@ -59,7 +60,7 @@ public class Download extends AppCompatActivity {
         btndl = findViewById(R.id.btnDL);
 
         Bundle extra = getIntent().getExtras();
-        final String Key = extra.getString("Key");
+        Key = extra.getString("Key");
         final String Key2 = extra.getString("Key2");
         final String Key3 = extra.getString("Key3");
         final String Key4 = extra.getString("Key4");
@@ -95,7 +96,7 @@ public class Download extends AppCompatActivity {
 
 
                 DownloadData(uri, v);
-                btndl.setText("Play");
+//                btndl.setText("Play");
 //
 //                    if(downloading==true){
 //
@@ -133,7 +134,7 @@ public class Download extends AppCompatActivity {
 
         //Set the local destination for the downloaded file to a path within the application's external files directory
         if (v.getId() == R.id.btnDL)
-            request.setDestinationInExternalFilesDir(Download.this, Environment.DIRECTORY_DOWNLOADS, "small.mp4");
+            request.setDestinationInExternalFilesDir(Download.this, Environment.DIRECTORY_DOWNLOADS, Key +".mp4");
 
         //Enqueue download and save into referenceId
         downloadReference = downloadManager.enqueue(request);
@@ -157,7 +158,6 @@ public class Download extends AppCompatActivity {
                     final int bytes_total = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
 
                     if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
-
 
                         downloading = false;
 
@@ -221,6 +221,7 @@ public class Download extends AppCompatActivity {
 
             case DownloadManager.STATUS_SUCCESSFUL:
                 msg = "Download complete!";
+                System.out.println(Environment.DIRECTORY_DOWNLOADS);
                 break;
 
             default:
