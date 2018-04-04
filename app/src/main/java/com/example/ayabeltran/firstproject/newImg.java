@@ -57,7 +57,7 @@ public class newImg extends AppCompatActivity {
             "https://ih1.redbubble.net/image.130551384.4550/flat,550x550,075,f.u1.jpg",
             "https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/2T0t-6V/game-over-8bit-retro-4k-a-4k-game-over-screen-8-bit-retro-style_rmhi2u_e__S0001.jpg",
             "https://cdn.makeuseof.com/wp-content/uploads/2012/01/8bit_mushroom_intro.jpg"
-//            "http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"
+//            "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4"
     };
 
 
@@ -153,7 +153,6 @@ public class newImg extends AppCompatActivity {
         int rnd = new Random().nextInt(mediaUrlList.length);
         imgUrl = mediaUrlList[rnd];
         return imgUrl;
-
     }
 
 
