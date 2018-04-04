@@ -111,6 +111,7 @@ public class Download extends AppCompatActivity {
 //                    }
 
 
+
             }
         });
 
@@ -172,16 +173,24 @@ public class Download extends AppCompatActivity {
                         public void run() {
 
                             progressBar.setVisibility(View.VISIBLE);
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
+                            progressBar.setProgress(dl_progress);
+                            System.out.println(dl_progress);
 
-                                @Override
-                                public void run() {
+                            if(dl_progress == 100) {
+                                btndl.setText("Play");
+                            }
 
-                                    progressBar.setProgress(dl_progress);
-
-                                }
-                            }, 1000);
+//                            Handler handler = new Handler();
+//                            handler.postDelayed(new Runnable() {
+//
+//                                @Override
+//                                public void run() {
+//
+//                                    progressBar.setProgress(dl_progress);
+//
+//
+//                                }
+//                            }, 1000);
 
                         }
                     });
