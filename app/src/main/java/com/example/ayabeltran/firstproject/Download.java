@@ -95,6 +95,7 @@ public class Download extends AppCompatActivity {
 
 
                 DownloadData(uri, v);
+                btndl.setText("Play");
 //
 //                    if(downloading==true){
 //
