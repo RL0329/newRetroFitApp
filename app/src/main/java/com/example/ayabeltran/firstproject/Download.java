@@ -96,13 +96,6 @@ public class Download extends AppCompatActivity {
 
 
         }
-
-
     }
-
-    public void downLoadImg(){
-
-    }
-
 }
 
