@@ -44,20 +44,29 @@ public class newImg extends AppCompatActivity {
     ImageView btnimg;
     Button btnaddimg;
     private static int SELECT_IMAGE = 1;
-    private static int CAPTURE_IMAGE = 2 ;
+    private static int CAPTURE_IMAGE = 2;
 //    Uri selectedimage;
 //    Bitmap camImg;
 //    Bitmap bitmap;
 
     String imgUrl;
+    String videoUrl;
 
-    public static String[] mediaUrlList = {
+    public static String[] imgUrlList = {
             "https://www.everythingcarers.org.au/media/1982/sample.jpg",
             "https://orig00.deviantart.net/fa32/f/2009/346/5/b/8bit_mario_kart_by_killdoser666.jpg",
             "https://ih1.redbubble.net/image.130551384.4550/flat,550x550,075,f.u1.jpg",
             "https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/2T0t-6V/game-over-8bit-retro-4k-a-4k-game-over-screen-8-bit-retro-style_rmhi2u_e__S0001.jpg",
             "https://cdn.makeuseof.com/wp-content/uploads/2012/01/8bit_mushroom_intro.jpg"
-//            "http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"
+    };
+
+    public static String[] videoUrlList = {
+            "https://www.demonuts.com/Demonuts/smallvideo.mp4",
+            "http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4",
+            "http://mirrors.standaloneinstaller.com/video-sample/dolbycanyon.mp4",
+            "http://mirrors.standaloneinstaller.com/video-sample/grb_2.mp4",
+            "http://mirrors.standaloneinstaller.com/video-sample/small.mp4"
+
     };
 
 
@@ -121,6 +130,7 @@ public class newImg extends AppCompatActivity {
 
         try {
             getImg();
+            getVideoUrl();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (Throwable throwable) {
@@ -132,29 +142,32 @@ public class newImg extends AppCompatActivity {
     private void getImg() throws Throwable {
 
 
-        String randURL = getRandomUrl();
+        String rndImgURL = getImgUrl();
 
-        if (randURL.contains(".jpg")){
             Picasso.get()
-                    .load(randURL)
+                    .load(rndImgURL)
                     .placeholder(R.drawable.ic_launcher_background)
                     .into(btnimg);
 
         }
-        if (randURL.contains(".mp4")){
 
 
-        }
+    public String getImgUrl() throws MalformedURLException {
 
-        }
-
-    public String getRandomUrl() throws MalformedURLException {
-
-        int rnd = new Random().nextInt(mediaUrlList.length);
-        imgUrl = mediaUrlList[rnd];
+        int rndimg = new Random().nextInt(imgUrlList.length);
+        imgUrl = imgUrlList[rndimg];
         return imgUrl;
 
     }
+
+    public String getVideoUrl() throws MalformedURLException {
+
+        int rndvid = new Random().nextInt(videoUrlList.length);
+        videoUrl = videoUrlList[rndvid];
+        return videoUrl;
+    }
+
+
 
 
 //    private String imageToString (Bitmap bitmap){
