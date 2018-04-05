@@ -27,6 +27,7 @@ public class PlayVideo extends AppCompatActivity {
 
 
         String vidPath= "/storage/emulated/0/Android/data/com.example.ayabeltran.firstproject/files/Download/"+ Download.vidFileName+".mp4";
+//        String vidPath= "/sdcard/"+ Download.vidFileName+".mp4";
         Uri uri = Uri.parse(vidPath);
         videoView.setVideoURI(uri);
         videoView.setMediaController(mediaC);

@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+
 public class Download extends AppCompatActivity {
 
     ImageView image;
@@ -24,6 +26,7 @@ public class Download extends AppCompatActivity {
             description;
     Button btndl;
     Uri uri;
+    Uri pathUri;
     ProgressBar progressBar;
     String Key;
     public static String vidFileName;
@@ -97,6 +100,10 @@ public class Download extends AppCompatActivity {
         //Set the local destination for the downloaded file to a path within the application's external files directory
         if (v.getId() == R.id.btnDL)
             request.setDestinationInExternalFilesDir(Download.this, Environment.DIRECTORY_DOWNLOADS, Key +".mp4");
+//            request.setDestinationInExternalFilesDir(Download.this, "/sdcard/", Key +".mp4");
+
+
+
 
         //Enqueue download and save into referenceId
         downloadReference = downloadManager.enqueue(request);
@@ -118,6 +125,11 @@ public class Download extends AppCompatActivity {
                     final int bytes_downloaded = cursor.getInt(cursor
                             .getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
                     final int bytes_total = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+
+                    //create video directory optional
+                    File videoDirectory = new File("/Internal Storage/Download/");
+                    videoDirectory.mkdirs();
+
 
                     if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
 
