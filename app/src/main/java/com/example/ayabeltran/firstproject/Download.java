@@ -137,8 +137,6 @@ public class Download extends AppCompatActivity {
                             progressBar.setProgress(dl_progress);
                             System.out.println(dl_progress);
 
-                            if(dl_progress == 1)
-                                Toast.makeText(Download.this, "Video Downloading", Toast.LENGTH_SHORT).show();
 
 
                             if(dl_progress == 100) {

@@ -16,6 +16,7 @@ public class PlayVideo extends AppCompatActivity {
     VideoView videoView;
     MediaController mediaC;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +26,7 @@ public class PlayVideo extends AppCompatActivity {
         mediaC = new MediaController(this);
 
 
-        String vidPath= "/storage/emulated/0/Download/"+ Download.vidFileName;
+        String vidPath= "/storage/emulated/0/Android/data/com.example.ayabeltran.firstproject/files/Download/"+ Download.vidFileName+".mp4";
         Uri uri = Uri.parse(vidPath);
         videoView.setVideoURI(uri);
         videoView.setMediaController(mediaC);
