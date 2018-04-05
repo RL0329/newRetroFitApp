@@ -1,16 +1,10 @@
 package com.example.ayabeltran.firstproject;
 
-import android.app.AlertDialog;
 import android.app.DownloadManager;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Environment;
-import android.os.Handler;
-import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,19 +17,6 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.UUID;
-
-import dmax.dialog.SpotsDialog;
-
 public class Download extends AppCompatActivity {
 
     ImageView image;
@@ -43,9 +24,9 @@ public class Download extends AppCompatActivity {
             description;
     Button btndl;
     Uri uri;
-//    boolean downloading = false;
     ProgressBar progressBar;
     String Key;
+    public static String vidFileName;
 
 
     @Override
@@ -81,21 +62,6 @@ public class Download extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-//                    AlertDialog dialog = new SpotsDialog(Download.this);
-//                    dialog.show();
-//                    dialog.setMessage("Downloading...");
-
-
-//                    String fileName = Key+".jpg";
-//
-//                    Picasso.get()
-//                            .load(Key3)
-//                            .into(new saveImageHelper(getBaseContext(),
-//                                    dialog,
-//                                    getApplicationContext().getContentResolver(),
-//                                    fileName,Key2));
-
-
 
 
                 if (btndl.getText()== "Play"){
@@ -106,22 +72,6 @@ public class Download extends AppCompatActivity {
                 else {
                     DownloadData(uri, v);
                 }
-
-//                btndl.setText("Play");
-//
-//                    if(downloading==true){
-//
-//                        Toast.makeText(Download.this, "DLtrue", Toast.LENGTH_SHORT).show();
-//                    }
-//                    else{
-////                        Toast.makeText(Download.this, "DLfalse", Toast.LENGTH_SHORT).show();
-//
-//                        dialog.dismiss();
-//                        Toast.makeText(Download.this, "Image downloaded", Toast.LENGTH_SHORT).show();
-//                        finish();
-//                    }
-
-
 
             }
         });
@@ -139,7 +89,7 @@ public class Download extends AppCompatActivity {
         DownloadManager.Request request = new DownloadManager.Request(uri);
 
         //Setting title of request
-        request.setTitle("Data Download");
+        request.setTitle(Key);
 
         //Setting description of request
         request.setDescription("Android Data download using DownloadManager.");
@@ -187,23 +137,16 @@ public class Download extends AppCompatActivity {
                             progressBar.setProgress(dl_progress);
                             System.out.println(dl_progress);
 
+                            if(dl_progress == 1)
+                                Toast.makeText(Download.this, "Video Downloading", Toast.LENGTH_SHORT).show();
+
+
                             if(dl_progress == 100) {
                                 progressBar.setVisibility(View.GONE);
                                 btndl.setText("Play");
                                 Toast.makeText(Download.this, "Video Downloaded", Toast.LENGTH_SHORT).show();
+                                vidFileName=Key;
                             }
-
-//                            Handler handler = new Handler();
-//                            handler.postDelayed(new Runnable() {
-//
-//                                @Override
-//                                public void run() {
-//
-//                                    progressBar.setProgress(dl_progress);
-//
-//
-//                                }
-//                            }, 1000);
 
                         }
                     });
@@ -214,8 +157,6 @@ public class Download extends AppCompatActivity {
 
             }
         }).start();
-
-//        downloading=false;
 
 
         return downloadReference;
